@@ -1,0 +1,9 @@
+.root {
+    background-color: #001529;
+    color: white;
+    padding: 10px;
+    display: flex;
+    gap:10px;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,85 @@
+.cardContainer {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+.userInfo {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+}
+
+.userInfo p {
+    font-size: 16px;
+}
+
+.userPic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    object-fit: cover;
+    position: relative;
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.buttonBan {
+    background-color: #ff4d4f;
+    color: white;
+}
+
+.buttonDelete {
+    background-color: #d9d9d9;
+    color: black;
+}
+
+.buttonUnban {
+    background-color: #52c41a;
+    color: white;
+}
+
+.banned {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff4d4f;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.noPhoto {
+    text-align: center;
+    padding-top:30px;
+    position: relative;
+}
+
+.collapseHeaderBanned {
+    color: red;
+}
+
+.collapsedHeader {
+    text-transform: uppercase;
+}
