@@ -1,6 +1,6 @@
-import { Table } from 'antd';
-import { IStar } from '../../api';
+import { Button, message, Table } from 'antd';
 import { TooltipClipBoard } from '../tooltip';
+import { ITransaction } from '../../transport';
 
 
 const dataSource = [
@@ -95,8 +95,8 @@ const columns = [
       { text: 5, value: 5 },
       { text: 6, value: 6 },
     ],
-    onFilter: (value: any, record: IStar) => record.Good.id === value,
-    sorter: (a:IStar, b:IStar) => a.id-b.id,
+    onFilter: (value: any, record: ITransaction) => record.Good.id === value,
+    sorter: (a:ITransaction, b:ITransaction) => a.id-b.id,
   },
   {
     title: 'G.Name',
@@ -109,8 +109,8 @@ const columns = [
       { text: 'Fast mode', value: 'Fast mode' },
       { text: 'Paint Can', value: 'Paint Can' },
     ],
-    onFilter: (value: any, record: IStar) => record.Good.name === value,
-    sorter: (a:IStar, b:IStar) => a.Good.name.localeCompare(b.Good.name),
+    onFilter: (value: any, record: ITransaction) => record.Good.name === value,
+    sorter: (a:ITransaction, b:ITransaction) => a.Good.name.localeCompare(b.Good.name),
   },
   {
     title: 'Price',
@@ -131,15 +131,15 @@ const columns = [
       { text: 'Pending', value: 'pending' },
       { text: 'Cancelled', value: 'cancelled' },
     ],
-    onFilter: (value: any, record: IStar) => record.status === value,
-    sorter: (a:IStar, b:IStar) => a.status.localeCompare(b.status)
+    onFilter: (value: any, record: ITransaction) => record.status === value,
+    sorter: (a:ITransaction, b:ITransaction) => a.status.localeCompare(b.status)
   },
   {
     title: 'Timestamp',
     dataIndex: 'timestamp',
     key: 'timestamp',
     render: (timestamp: number) => <TooltipClipBoard title={new Date(timestamp).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}/>,
-    sorter:(a:IStar, b:IStar) => a.timestamp-b.timestamp
+    sorter:(a:ITransaction, b:ITransaction) => a.timestamp-b.timestamp
   },
   {
     title: 'Signature',
@@ -153,14 +153,23 @@ const columns = [
     key: 'tg_pay_charge_id',
     render:(data:string)=><TooltipClipBoard title={data}/>,
   },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (record: ITransaction) => (
+      <Button onClick={() => {
+        message.success('Revert transaction: ' + record.id);
+      }}>
+        Revert
+      </Button>
+    ),
+  },
 ]
 
 
-export const StarsTable = ()=>{
+export const TransactionsTable = ()=>{
   return <div>
-    <h2>Покупки транза</h2>
+    <h2>Transactions Stars</h2>
     <Table dataSource={dataSource} columns={columns} pagination={false} rowKey={'id'} />
   </div>
-
-
 }

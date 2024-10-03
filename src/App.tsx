@@ -1,60 +1,18 @@
-import { useState } from 'react';
-import { Layout } from 'antd';
-import styles from './App.module.css';
-import { Header, StarsTable, WebThreeTable, GoodsTable, BoostsTable, UserInfo } from './components';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { ApiClientProvider } from './context';
+import { Main } from './pages/main';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './transport';
 
-const {Content} = Layout;
-
-const USER = {
-  id: 379402843,
-  firstName: "Aleksandr",
-  lastName: "",
-  balance: 52260,
-  repaints: 4052,
-  score: null,
-  language: "ru",
-  isPremium: true,
-  friends: 3,
-  intro: false,
-  userPic: "",
-  league: "platinum",
-}
-
-
-export const App = () => {
-
-  const [loading, setLoading] = useState(false);
-
-  const handleSearch = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
-  };
-
-  return (
-    <>
-      <Header onButtonClick={handleSearch} loading={loading}/>
-      <Layout className={styles.container}>
-        <Content>
-          <UserInfo user={USER}/>
-        </Content>
-        <Content>
-          <div className={styles.tableGrid}>
-            <div className={styles.tableBlock}>
-              <StarsTable/>
-            </div>
-            <div className={styles.tableBlock}>
-              <WebThreeTable/>
-            </div>
-            <div className={styles.tableBlock}>
-              <GoodsTable/>
-            </div>
-            <div className={styles.tableBlock}>
-              <BoostsTable/>
-            </div>
-          </div>
-        </Content>
-      </Layout>
-    </>
-  );
-};
-
+export const App = () => (
+    <ApiClientProvider>
+      <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/callback" element={<div>OpenION</div>} />
+        </Routes>
+      </Router>
+      </QueryClientProvider>
+    </ApiClientProvider>
+);

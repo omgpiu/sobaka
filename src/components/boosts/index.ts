@@ -1,1 +1,0 @@
-export { BoostsTable } from './BoostsTable'

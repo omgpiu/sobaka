@@ -1,53 +1,6 @@
-import { Button, message, Table } from 'antd';
-import { IGood } from '../../api';
-
-const dataSource = [
-  {
-    id: 1,
-    name: "Restoring charges",
-    description: "Instantly restore charges for painting.",
-    image_url: "https://npx-cdn.fra1.digitaloceanspaces.com/icons/icon_lightning.png",
-    price: 32,
-    currency: "XTR",
-    isOnePiece: false
-  },
-  {
-    id: 2,
-    name: "Dynamite",
-    description: "A 5x5 blast. You get pixels.",
-    image_url: "https://npx-cdn.fra1.digitaloceanspaces.com/icons/icon_tnt.png",
-    price: 64,
-    currency: "XTR",
-    isOnePiece: false
-  },
-  {
-    id: 4,
-    name: "Pipette",
-    description: "Copy color from any pixel.",
-    image_url: "https://npx-cdn.fra1.cdn.digitaloceanspaces.com/icons/icon_pipette.png",
-    price: 128,
-    currency: "XTR",
-    isOnePiece: true
-  },
-  {
-    id: 5,
-    name: "Fast mode",
-    description: "Paint pixels with a single touch.",
-    image_url: "https://npx-cdn.fra1.cdn.digitaloceanspaces.com/icons/icon_fastmode.png",
-    price: 128,
-    currency: "XTR",
-    isOnePiece: true
-  },
-  {
-    id: 6,
-    name: "Paint Can",
-    description: "A 3×3 color spot. You get pixels.",
-    image_url: "https://npx-cdn.fra1.cdn.digitaloceanspaces.com/icons/icon_paintcan.png",
-    price: 32,
-    currency: "XTR",
-    isOnePiece: false
-  }
-];
+import { Button, Input, message, Modal, Select, Table } from 'antd';
+import React, { useState } from 'react';
+import { IGood } from '../../transport';
 
 const columns = [
   {
@@ -109,30 +62,79 @@ const columns = [
     render: (isOnePiece: boolean) => (isOnePiece ? 'Yes' : 'No'),
     sorter: (a: IGood, b: IGood) => Number(a.isOnePiece) - Number(b.isOnePiece),
   },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text: any, record: IGood) => (
-      <Button type="link" onClick={() => {
-        console.log(text)
-        message.success('Copied to clipboard!' + record.id);
-      }}>
-        Delete
-      </Button>
-    ),
-  },
 ];
 
-export const GoodsTable = () => {
+interface Props {
+  availableGoodsArray?: { id: IGood['id'], name: IGood['name'] }[]
+  userGoods: Array<IGood & { inner_id: string }>
+}
+
+export const GoodsTable: React.FC<Props> = ({availableGoodsArray = [], userGoods = []}) => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState<number>(0);
+
 
   const addGoods = () => {
+    setIsModalVisible(true);
+  };
 
-  }
+  // Закрытие модального окна
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedItem(null);
+    setQuantity(0);
+  };
 
+  const handleOk = () => {
+    if (!selectedItem || quantity <= 0) {
+      message.error('Выберите товар и введите количество');
+      return;
+    }
+
+    message.success(`Добавлено ${quantity} шт. товара: ${selectedItem}`);
+
+    setIsModalVisible(false);
+    setSelectedItem(null);
+    setQuantity(0);
+  };
   return <div>
     <h2>Goods <Button type="primary" onClick={addGoods}>
       Начислить
     </Button></h2>
-    <Table dataSource={dataSource} columns={columns} pagination={false}/>
+    <Table dataSource={userGoods} columns={columns} pagination={{
+      total: userGoods.length,
+      showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
+      pageSize:5
+    }} rowKey={'inner_id'}/>
+    <Modal
+      title="Добавить товар"
+      open={isModalVisible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      <div style={{marginBottom: '16px'}}>
+        <Select
+          placeholder="Выберите товар"
+          style={{width: '100%'}}
+          onChange={(value) => setSelectedItem(value)}
+        >
+          {availableGoodsArray.map((item) => (
+            <Select.Option key={item.id} value={item.name}>
+              {item.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+
+      <Input
+        type="number"
+        placeholder="Введите количество"
+        value={quantity}
+        onChange={(e) => setQuantity(Number(e.target.value))}
+        min={1}
+      />
+    </Modal>
   </div>
 }

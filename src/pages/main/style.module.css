@@ -19,7 +19,7 @@
 
 .tableGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 3fr 2fr;
     gap: 20px;
     margin-top: 20px;
 }
@@ -28,4 +28,9 @@
     background: #f0f2f5;
     padding: 10px;
     border-radius: 8px;
+}
+
+.lists {
+    display: flex;
+    gap:6px;
 }

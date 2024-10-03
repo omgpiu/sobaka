@@ -1,6 +1,6 @@
 import { Table } from 'antd';
-import React from 'react';
 import { TooltipClipBoard } from '../tooltip';
+import { IWebThree } from '../../api';
 
 const dataSource = [
   {
@@ -30,19 +30,19 @@ const columns = [
     title: 'ID',
     dataIndex: 'id',
     key: 'id',
-    sorter: (a, b) => a.id - b.id,
+    sorter: (a:IWebThree, b:IWebThree) => a.id - b.id,
   },
   {
     title: 'Amount',
     dataIndex: 'amount',
     key: 'amount',
-    sorter: (a, b) => a.amount - b.amount,
+    sorter: (a:IWebThree, b:IWebThree) => a.amount - b.amount,
   },
   {
     title: 'Currency',
     dataIndex: 'currency',
     key: 'currency',
-    sorter: (a, b) => a.currency.localeCompare(b.currency),
+    sorter: (a:IWebThree, b:IWebThree) => a.currency.localeCompare(b.currency),
   },
   {
     title: 'Status',
@@ -53,14 +53,14 @@ const columns = [
       { text: 'Pending', value: 'pending' },
       { text: 'Cancelled', value: 'cancelled' },
     ],
-    onFilter: (value, record) => record.status === value,
-    sorter: (a, b) => a.status.localeCompare(b.status)
+    onFilter: (value:any, record:any) => record.status === value,
+    sorter: (a:IWebThree, b:IWebThree) => a.status.localeCompare(b.status)
   },
   {
     title: 'Start Date',
     dataIndex: 'dtmStart',
     key: 'dtmStart',
-    sorter: (a, b) => a.dtmStart - b.dtmStart,
+    sorter: (a:IWebThree, b:IWebThree) => a.dtmStart - b.dtmStart,
     render: (timestamp: number) => new Date(timestamp).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })
   },
   {
@@ -73,7 +73,14 @@ const columns = [
     title: 'OnChainHash',
     dataIndex: 'onChainHash',
     key: 'onChainHash',
-    render: (hash: string) => <TooltipClipBoard title={hash}/>
+    render: (hash: string) => {
+      const href = `https://tonviewer.com/transaction/${hash}`;
+      return (
+        <a href={href} target="_blank" rel="noopener noreferrer">
+          Link
+        </a>
+      );
+    }
   },
 ];
 

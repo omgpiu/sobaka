@@ -1,1 +1,0 @@
-export { StarsTable } from './StarsTable'
