@@ -78,7 +78,8 @@ export const UserInfo: React.RC<Props> = ({user}) => {
   </Card>)
 
   const panelHeader = <span
-    className={clsx({[styles.collapseHeaderBanned]: !user.isBanned},styles.collapsedHeader)}>{user.firstName}  {!user.isBanned && '- USER IS BANNED'}</span>
+    className={clsx({[styles.collapseHeaderBanned]: user.isBanned},styles.collapsedHeader)}>{user.firstName}  {user.isBanned && '- USER IS BANNED'}</span>
+
   const items = [
     {
       key: '1',

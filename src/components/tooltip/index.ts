@@ -1,0 +1,1 @@
+export { TooltipClipBoard } from './ToolpitClipBoard'

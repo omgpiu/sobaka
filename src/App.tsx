@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout } from 'antd';
 import styles from './App.module.css';
-import { Header, StarsTable, WebThreeTable, TasksTable, BoostsTable,UserInfo } from './components';
+import { Header, StarsTable, WebThreeTable, GoodsTable, BoostsTable, UserInfo } from './components';
 
 const {Content} = Layout;
 
@@ -19,7 +19,6 @@ const USER = {
   userPic: "",
   league: "platinum",
 }
-
 
 
 export const App = () => {
@@ -47,7 +46,7 @@ export const App = () => {
               <WebThreeTable/>
             </div>
             <div className={styles.tableBlock}>
-              <TasksTable/>
+              <GoodsTable/>
             </div>
             <div className={styles.tableBlock}>
               <BoostsTable/>
