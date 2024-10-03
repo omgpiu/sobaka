@@ -3,10 +3,10 @@ import { Tooltip, message } from 'antd';
 import styles from './styles.module.css'
 
 interface Props {
-  title:string
+  title: number | string
 }
 
-export const TooltipClipBoard:React.FC<Props> = ({title})=>{
+export const TooltipClipBoard: React.FC<Props> = ({title}) => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {

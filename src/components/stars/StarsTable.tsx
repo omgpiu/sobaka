@@ -3,7 +3,7 @@ import { IStar } from '../../api';
 import { TooltipClipBoard } from '../tooltip';
 
 
-const dataSource:IStar[] = [
+const dataSource = [
   {
     "id": 1964383,
     "user_id": 694414073,
@@ -64,14 +64,14 @@ const dataSource:IStar[] = [
     "signature": "5917aac5b351198d95e031f692e50356b28af06b9b26cbf86eff1905506748d6",
     "tg_pay_charge_id": "stx9jig6upTcLEggAR3vhshHAL-1ykCImMJhztBLRRWYiCb0XcfuuUMvzrRWizkrJSxym5Cux4Vh9rPjJ3xJdhs1tTRQa44knIeL_wWewGj9erYVleCD6HNpMifw9aw98gP"
   }
-];
+]
 
 const columns = [
   {
     title: 'StarsID',
     dataIndex: 'id',
     key: 'id',
-    render:(id:string)=><TooltipClipBoard title={id}/>
+    render:(id:number)=><TooltipClipBoard title={id}/>
   },
   {
     title: 'Total Amount',
@@ -89,14 +89,14 @@ const columns = [
     dataIndex: ['Good', 'id'],
     key: 'good_id',
     filters: [
-      { text: '1', value: 1 },
-      { text: '2', value: 2 },
-      { text: '4', value: 4 },
-      { text: '5', value: 5 },
-      { text: '6', value: 6 },
+      { text:1, value: 1 },
+      { text: 2, value: 2 },
+      { text: 4, value: 4 },
+      { text: 5, value: 5 },
+      { text: 6, value: 6 },
     ],
-    onFilter: (value: string, record: string) => record.Good.id === value,
-    sorter: (a, b) => a.id-b.id,
+    onFilter: (value: any, record: IStar) => record.Good.id === value,
+    sorter: (a:IStar, b:IStar) => a.id-b.id,
   },
   {
     title: 'G.Name',
@@ -109,14 +109,13 @@ const columns = [
       { text: 'Fast mode', value: 'Fast mode' },
       { text: 'Paint Can', value: 'Paint Can' },
     ],
-    onFilter: (value: string, record: string) => record.Good.name === value,
-    sorter: (a, b) => a.Good.name.localeCompare(b.Good.name),
+    onFilter: (value: any, record: IStar) => record.Good.name === value,
+    sorter: (a:IStar, b:IStar) => a.Good.name.localeCompare(b.Good.name),
   },
   {
     title: 'Price',
     dataIndex: ['Good', 'price'],
     key: 'price',
-    render: (price: number) => `${price}`,
   },
   {
     title: 'Amount',
@@ -132,15 +131,15 @@ const columns = [
       { text: 'Pending', value: 'pending' },
       { text: 'Cancelled', value: 'cancelled' },
     ],
-    onFilter: (value: string, record: string) => record.status === value,
-    sorter: (a, b) => a.status.localeCompare(b.status)
+    onFilter: (value: any, record: IStar) => record.status === value,
+    sorter: (a:IStar, b:IStar) => a.status.localeCompare(b.status)
   },
   {
     title: 'Timestamp',
     dataIndex: 'timestamp',
     key: 'timestamp',
     render: (timestamp: number) => <TooltipClipBoard title={new Date(timestamp).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}/>,
-    sorter:(a, b) => a.timestamp-b.timestamp
+    sorter:(a:IStar, b:IStar) => a.timestamp-b.timestamp
   },
   {
     title: 'Signature',
@@ -154,7 +153,7 @@ const columns = [
     key: 'tg_pay_charge_id',
     render:(data:string)=><TooltipClipBoard title={data}/>,
   },
-];
+]
 
 
 export const StarsTable = ()=>{

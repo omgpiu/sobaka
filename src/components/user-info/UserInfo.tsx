@@ -8,7 +8,7 @@ interface Props {
   user: IUser
 }
 
-export const UserInfo: React.RC<Props> = ({user}) => {
+export const UserInfo: React.FC<Props> = ({user}) => {
 
   const handleBan = () => {
     message.warning('User has been banned');
@@ -19,7 +19,6 @@ export const UserInfo: React.RC<Props> = ({user}) => {
   };
 
   const handleUnban = () => {
-    setUser((prevUser) => ({...prevUser, isBanned: false}));
     message.success('User has been unbanned');
   };
 

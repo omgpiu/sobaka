@@ -15,6 +15,7 @@ export interface IUser {
     slug:number
     id:number
   }
+  isBanned?:boolean
 }
 
 

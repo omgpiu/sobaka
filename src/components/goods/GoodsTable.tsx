@@ -1,5 +1,5 @@
-import { Table } from 'antd';
-import React from 'react';
+import { Button, message, Table } from 'antd';
+import { IGood } from '../../api';
 
 const dataSource = [
   {
@@ -55,28 +55,28 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
     filters: [
-      { text: '1', value: 1 },
-      { text: '2', value: 2 },
-      { text: '4', value: 4 },
-      { text: '5', value: 5 },
-      { text: '6', value: 6 },
+      {text: '1', value: 1},
+      {text: '2', value: 2},
+      {text: '4', value: 4},
+      {text: '5', value: 5},
+      {text: '6', value: 6},
     ],
-    onFilter: (value: string, record: string) => record.id === value,
-    sorter: (a, b) => a.id-b.id,
+    onFilter: (value: any, record: IGood) => record.id === value,
+    sorter: (a: IGood, b: IGood) => a.id - b.id,
   },
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
     filters: [
-      { text: 'Restoring charges', value: 'Restoring charges' },
-      { text: 'Dynamite', value: 'Dynamite' },
-      { text: 'Pipette', value: 'Pipette' },
-      { text: 'Fast mode', value: 'Fast mode' },
-      { text: 'Paint Can', value: 'Paint Can' },
+      {text: 'Restoring charges', value: 'Restoring charges'},
+      {text: 'Dynamite', value: 'Dynamite'},
+      {text: 'Pipette', value: 'Pipette'},
+      {text: 'Fast mode', value: 'Fast mode'},
+      {text: 'Paint Can', value: 'Paint Can'},
     ],
-    onFilter: (value: string, record: string) => record.name === value,
-    sorter: (a, b) => a.name.localeCompare(b.name),
+    onFilter: (value: any, record: IGood): boolean => record.name === value,
+    sorter: (a: IGood, b: IGood) => a.name.localeCompare(b.name),
   },
   {
     title: 'Description',
@@ -88,32 +88,51 @@ const columns = [
     title: 'Image',
     dataIndex: 'image_url',
     key: 'image_url',
-    render: (url: string) => <img src={url} alt="icon" style={{ width: 20, height: 20 }} />,
+    render: (url: string) => <img src={url} alt="icon" style={{width: 20, height: 20}}/>,
   },
   {
     title: 'Price',
     dataIndex: 'price',
     key: 'price',
-    sorter: (a, b) => a.price - b.price,
-    render: (price: number, record: any) => `${price} ${record.currency}`,
+    sorter: (a: IGood, b: IGood) => a.price - b.price,
+    render: (price: number, record: IGood) => `${price} ${record.currency}`,
   },
   {
     title: 'Is One Piece',
     dataIndex: 'isOnePiece',
     key: 'isOnePiece',
     filters: [
-      { text: 'Yes', value: true },
-      { text: 'No', value: false },
+      {text: 'Yes', value: true},
+      {text: 'No', value: false},
     ],
-    onFilter: (value: boolean, record: any) => record.isOnePiece === value,
+    onFilter: (value: any, record: IGood) => record.isOnePiece === value,
     render: (isOnePiece: boolean) => (isOnePiece ? 'Yes' : 'No'),
-    sorter: (a, b) => Number(a.isOnePiece) - Number(b.isOnePiece),
-  }
+    sorter: (a: IGood, b: IGood) => Number(a.isOnePiece) - Number(b.isOnePiece),
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text: any, record: IGood) => (
+      <Button type="link" onClick={() => {
+        console.log(text)
+        message.success('Copied to clipboard!' + record.id);
+      }}>
+        Delete
+      </Button>
+    ),
+  },
 ];
 
-export const GoodsTable = ()=>{
+export const GoodsTable = () => {
+
+  const addGoods = () => {
+
+  }
+
   return <div>
-    <h2>Goods</h2>
-    <Table dataSource={dataSource} columns={columns} pagination={false} />
+    <h2>Goods <Button type="primary" onClick={addGoods}>
+      Начислить
+    </Button></h2>
+    <Table dataSource={dataSource} columns={columns} pagination={false}/>
   </div>
 }

@@ -48,8 +48,8 @@ export class ApiClient {
     return response.data
   }
 
-  async getUserGoods(userId: string): Promise<IUserGoods> {
-    const response = await this.axiosInstance.get("purchase/goods",{
+  async returnUserGoods(userId: string): Promise<IUserGoods> {
+    const response = await this.axiosInstance.post("purchase/goods",{
       params: {
         userId
       },
@@ -57,8 +57,62 @@ export class ApiClient {
     return response.data
   }
 
-  async getUserGoods(userId: string): Promise<IUserGoods> {
-    const response = await this.axiosInstance.get("purchase/goods",{
+  async chargeUserGoods(userId: string): Promise<IUserGoods> {
+    const response = await this.axiosInstance.post("purchase/goods",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async getUserTasks(userId: string) {
+    const response = await this.axiosInstance.get("tasks",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async getUserBoosts(userId: string){
+    const response = await this.axiosInstance.get("boosts",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async updateUserTasks(userId: string) {
+    const response = await this.axiosInstance.get("tasks",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async updateUserBoosts(userId: string){
+    const response = await this.axiosInstance.get("boosts",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async banUser(userId: string){
+    const response = await this.axiosInstance.post("users/ban",{
+      params: {
+        userId
+      },
+    })
+    return response.data
+  }
+
+  async deleteUser(userId: string){
+    const response = await this.axiosInstance.post("users/delete",{
       params: {
         userId
       },

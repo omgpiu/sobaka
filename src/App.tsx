@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Layout } from 'antd';
 import styles from './App.module.css';
 import { Header, StarsTable, WebThreeTable, GoodsTable, BoostsTable, UserInfo } from './components';
