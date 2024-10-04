@@ -17,7 +17,7 @@ const App = () => {
       auth.signinRedirect();
     }
   }, []);
-
+  console.log(auth,'auth')
   if (auth.isLoading) {
     return <div>Загрузка...</div>;
   }
@@ -40,7 +40,6 @@ const App = () => {
   if (auth.error) {
     return <div>Ошибка авторизации: {auth.error.message}</div>;
   }
-  console.log(auth,'auth')
   return  <div style={{color:'black'}}>GOVNO  </div>
 };
 
