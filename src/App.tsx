@@ -39,7 +39,7 @@ const App = () => {
     return <div>Ошибка авторизации: {auth.error.message}</div>;
   }
 
-  return null;
+  return  <div>GOVNO </div>
 };
 
 
