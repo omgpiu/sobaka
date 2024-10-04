@@ -8,7 +8,6 @@ import {
   IWebThree
 } from '../types.ts';
 import { availableGoodsExtractor, userExtractor } from '../extractors';
-import { initData } from './token.ts';
 
 
 
@@ -16,8 +15,8 @@ export class ApiClient {
   private axiosInstance: AxiosInstance;
   readonly token:string
   constructor(token: string) {
-    this.token = token;
-    console.log(this.token);
+    this.token = import.meta.env.VITE_API_TOKEN ?? token
+
     this.axiosInstance = axios.create({
       baseURL: "https://dev.notpx.app/api/v1",
       headers: {
@@ -26,7 +25,7 @@ export class ApiClient {
     });
 
     this.axiosInstance.interceptors.request.use((config) => {
-      config.headers.Authorization = `InitData ${initData}`;
+      config.headers.Authorization = `InitData ${this.token}`;
       return config;
     });
   }
