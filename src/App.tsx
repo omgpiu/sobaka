@@ -14,7 +14,7 @@ const App = () => {
     if (!auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator) {
       auth.signinRedirect();
     }
-  }, [auth.isLoading, auth.isAuthenticated, auth.activeNavigator]);
+  }, []);
 
   if (auth.isLoading) {
     return <div>Загрузка...</div>;
