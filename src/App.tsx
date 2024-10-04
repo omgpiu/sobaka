@@ -1,18 +1,53 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { ApiClientProvider } from './context';
+import { ApiClientProvider,AuthProvider } from './context';
 import { Main } from './pages/main';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './transport';
+import {  useEffect } from 'react';
+import { useAuth } from 'react-oidc-context';
 
-export const App = () => (
-    <ApiClientProvider>
-      <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/callback" element={<div>OpenION</div>} />
-        </Routes>
-      </Router>
-      </QueryClientProvider>
-    </ApiClientProvider>
-);
+
+const App = () => {
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (!auth.isAuthenticated && !auth.activeNavigator) {
+      auth.signinRedirect();
+    }
+  }, [auth]);
+
+  if (auth.isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (auth.isAuthenticated) {
+    return (
+      <ApiClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/callback" element={<div>OpenION</div>} />
+            </Routes>
+          </Router>
+        </QueryClientProvider>
+      </ApiClientProvider>
+    );
+  }
+
+  if (auth.error) {
+    return <div>Ошибка авторизации: {auth.error.message}</div>;
+  }
+
+  return null;
+};
+
+
+
+export const WrappedApp = () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+};
