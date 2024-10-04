@@ -6,7 +6,7 @@ interface AuthContextProviderProps {
 }
 
 const oidcConfig: AuthProviderProps = {
-  authority: import.meta.env.VITE_OIDC_ISSUER,
+  authority: 'https://github.com/login/oauth/authorize',
   client_id: import.meta.env.VITE_OIDC_ACCESS,
   redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
   scope: 'openid profile email',
