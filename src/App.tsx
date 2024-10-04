@@ -11,10 +11,10 @@ const App = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    if (!auth.isAuthenticated && !auth.activeNavigator) {
+    if (!auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator) {
       auth.signinRedirect();
     }
-  }, [auth]);
+  }, [auth.isLoading, auth.isAuthenticated, auth.activeNavigator]);
 
   if (auth.isLoading) {
     return <div>Загрузка...</div>;
