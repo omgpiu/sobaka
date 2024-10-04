@@ -11,7 +11,9 @@ const App = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    if (!auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator) {
+    console.log('useEffect',auth)
+    if (!auth.isAuthenticated) {
+      console.log('HELLO REDIRECRT')
       auth.signinRedirect();
     }
   }, []);
