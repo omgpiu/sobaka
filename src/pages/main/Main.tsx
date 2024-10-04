@@ -2,23 +2,23 @@ import { Layout } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { GoodsTable, Header, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
-import {  useGetUserQuery } from '../../transport';
-import { useState } from 'react';
+import {  useGetUserInfoQuery } from '../../transport';
 
 const {Content} = Layout;
 
 export const Main = () => {
-  const [userId,setUserId] = useState('289186646')
-  const {isLoading,getUser, userData,goods} = useGetUserQuery()
 
-  const requestHandler = ()=>{
-    getUser(userId)
+  const {isLoading,getUser, userData,goods} = useGetUserInfoQuery()
+
+  const requestHandler = (id:string)=>{
+    getUser(id)
+    console.log('CLICK')
   }
 
 
   return (
     <>
-      <Header onButtonClick={requestHandler} loading={isLoading} setUserId={setUserId} userId={userId}/>
+      <Header onButtonClick={requestHandler} loading={isLoading}/>
       <Layout className={styles.container}>
         <Content>
           <UserInfo user={userData?.user}/>

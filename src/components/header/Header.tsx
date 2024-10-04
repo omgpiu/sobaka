@@ -1,35 +1,37 @@
 import styles from './Header.module.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Layout } from 'antd';
 
 interface Props {
   loading: boolean
-  onButtonClick:()=>void
-  setUserId:(id:string)=>void
-  userId:string
+  onButtonClick:(usedId:string)=>void
 
 }
-export const Header:React.FC<Props> = ({loading,onButtonClick,setUserId,userId}) => {
+export const Header:React.FC<Props> = ({loading,onButtonClick}) => {
+  const [userId,setUserId] = useState('289186646')
 
-  const handleQueryChange = (e:any) => {
+  const handleInputChange = (e:any) => {
     setUserId(e.target.value);
   };
+
+  const onClickHandler =()=>{
+    onButtonClick(userId)
+  }
 
   return (
     <div>
       <Layout.Header className={styles.root}>
       <Input
+        className={styles.input}
         placeholder="User ID"
         value={userId}
-        onChange={handleQueryChange}
-        style={{width: 300}}
+        onChange={handleInputChange}
         disabled={loading}
       />
       <Button
         type="primary"
-        onClick={onButtonClick}
+        onClick={onClickHandler}
         loading={loading}
-        disabled={loading}
       >
         Get user info
       </Button>
