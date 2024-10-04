@@ -13,13 +13,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-}
- p {
+p {
   margin: 0;
 }
 
 h2 {
   margin: 0 0 10px;
+}
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background: #f5f5f5;
 }
