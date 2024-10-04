@@ -25,6 +25,12 @@
     gap: 20px;
 }
 
+@media (max-width: 1920px) {
+    .tableGrid {
+        grid-template-columns: auto;
+    }
+}
+
 .tableBlock {
     background: #f0f2f5;
     border-radius: 8px;
