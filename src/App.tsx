@@ -38,8 +38,8 @@ const App = () => {
   if (auth.error) {
     return <div>Ошибка авторизации: {auth.error.message}</div>;
   }
-
-  return  <div>GOVNO </div>
+  console.log(auth,'auth')
+  return  <div style={{color:'black'}}>GOVNO  </div>
 };
 
 
