@@ -22,7 +22,7 @@ export const TransactionsTable:React.FC<Props> = ({stars}) => {
 
   }
 
-  const columns=useMemo(() => [
+  const columns= useMemo(() => [
     {
       title: 'StarsID',
       dataIndex: 'id',
@@ -115,7 +115,7 @@ export const TransactionsTable:React.FC<Props> = ({stars}) => {
       title: 'Action',
       key: 'action',
       width:150,
-      align: 'center',
+      align: 'center' as const,
       render: (record: ITransaction) => {
         if(record.status ==='refunded'){
           return <span>Refunded</span>
