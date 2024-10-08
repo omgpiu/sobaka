@@ -17,7 +17,6 @@ const oidcConfig: AuthProviderProps = {
 
 
 export const AuthProvider = ({ children }: AuthContextProviderProps) => {
-  console.warn(oidcConfig,'congig')
   return <OidcProvider {...oidcConfig}>{children}</OidcProvider>;
 };
 

@@ -1,6 +1,8 @@
 import { Table } from 'antd';
 import { TooltipClipBoard } from '../tooltip';
 import { IWebThree } from '../../transport';
+import { Empty } from '../empty';
+
 
 const dataSource = [
   {
@@ -88,6 +90,9 @@ export const WebThreeTable = () => {
   return <div>
     <h2>Транзакции WEB3</h2>
     <Table dataSource={dataSource} columns={columns} rowKey={'id'}
+           locale={{
+             emptyText: <Empty/>
+           }}
            pagination={{
              total: dataSource.length,
              showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,

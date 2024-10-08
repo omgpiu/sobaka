@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { useEffect, useMemo, useState } from 'react';
+import { message } from 'antd';
 
 
 export const useGetUserInfoQuery = () => {
   const apiClient = useApiClient()
 
   const [userId, setUserId] = useState<string | null>(null);
-  const {data: userData, isError, isLoading, isSuccess} = useQuery({
+  const {data: userData, isError, isLoading, isSuccess,refetch:refetchUser} = useQuery({
     queryKey: ['user'],
     queryFn: () => apiClient.getUserMining(userId!),
     enabled: Boolean(userId),
@@ -51,18 +52,30 @@ export const useGetUserInfoQuery = () => {
       }
     }
     return result
-  }, [goodsData, userData?.user])
-
-
-  useEffect(() => {
-    if (isSuccess) {
-      setUserId(null)
-    }
-  }, [isSuccess])
+  }, [goodsData, userData?.user.Goods])
 
   const handleClick = (id: string) => {
     setUserId(id);
   };
+
+  useEffect(() => {
+    if(userId){
+      refetchUser()
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if(isError){
+      message.error('Ошибка с данными юзера, проверь айди')
+    }
+    if(isErrorGoods){
+      message.error('Ошибка с получением мапы гудсов')
+    }
+    if(isStarsError) {
+      message.error('Ошибка с получением старс транзакций')
+    }
+
+  }, [isError,isErrorGoods,isStarsError]);
 
   return {
     isSuccess,

@@ -2,6 +2,7 @@ import { Button, message, Table } from 'antd';
 import { TooltipClipBoard } from '../tooltip';
 import { ITransaction, useRefundStarMutation } from '../../transport';
 import React, { useMemo } from 'react';
+import { Empty } from '../empty';
 
 interface Props {
   stars:ITransaction[]
@@ -136,6 +137,9 @@ export const TransactionsTable:React.FC<Props> = ({stars}) => {
   return <div>
     <h2>Transactions Stars</h2>
     <Table dataSource={stars} columns={columns} rowKey={'id'}
+           locale={{
+             emptyText: <Empty/>
+           }}
            pagination={{
              total: stars.length,
              showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,

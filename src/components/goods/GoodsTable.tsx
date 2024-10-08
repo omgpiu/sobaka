@@ -1,6 +1,7 @@
 import { Button, Input, message, Modal, Select, Table } from 'antd';
 import React, { useState } from 'react';
-import { IGood } from '../../transport';
+import { IGood, IParamsAddGoods, useAddGoods } from '../../transport';
+import { Empty } from '../empty';
 
 const columns = [
   {
@@ -70,59 +71,85 @@ interface Props {
 }
 
 export const GoodsTable: React.FC<Props> = ({availableGoodsArray = [], userGoods = []}) => {
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<{ id: IGood['id'], name: IGood['name'] } | null>(null);
   const [quantity, setQuantity] = useState<number>(0);
 
+  const { addGoods} = useAddGoods()
 
-  const addGoods = () => {
+  const openModal = () => {
     setIsModalVisible(true);
   };
 
-  // Закрытие модального окна
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedItem(null);
     setQuantity(0);
   };
 
-  const handleOk = () => {
+  const sendRequest = () => {
     if (!selectedItem || quantity <= 0) {
       message.error('Выберите товар и введите количество');
       return;
     }
+    const params: Omit<IParamsAddGoods, 'userId'> = {
+      goods: {
+        quantity,
+        name: selectedItem.name,
+        id: selectedItem.id,
+      }
+    }
 
-    message.success(`Добавлено ${quantity} шт. товара: ${selectedItem}`);
+    addGoods(params).then(() => {
+      message.success("Добавлено: " + params.goods.quantity + ' ' + params.goods.name);
+    }).catch(() => {
+      message.error(params.goods.name + ' не были добавлены, смотри консоль');
+    })
 
     setIsModalVisible(false);
     setSelectedItem(null);
     setQuantity(0);
   };
+
   return <div>
-    <h2>Goods <Button type="primary" onClick={addGoods}>
-      Начислить
-    </Button></h2>
-    <Table dataSource={userGoods} columns={columns} pagination={{
-      total: userGoods.length,
-      showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
-      pageSize:5
-    }} rowKey={'inner_id'}/>
+    <h2>Goods
+      <Button type="primary" onClick={openModal}>
+        Начислить
+      </Button>
+    </h2>
+    <Table dataSource={userGoods} columns={columns}
+           locale={{
+             emptyText: <Empty/>
+           }}
+           pagination={{
+             total: userGoods.length,
+             showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
+             pageSize: 5
+           }} rowKey={'inner_id'}/>
     <Modal
       title="Добавить товар"
       open={isModalVisible}
-      onOk={handleOk}
+      onOk={sendRequest}
       onCancel={handleCancel}
     >
       <div style={{marginBottom: '16px'}}>
         <Select
           placeholder="Выберите товар"
           style={{width: '100%'}}
-          onChange={(value) => setSelectedItem(value)}
+          onChange={(value: string, selectedCust) => {
+            //@ts-ignore antd pidorasy
+            const id = selectedCust.key
+            setSelectedItem({
+              name: value,
+              id: Number(id)
+            })
+          }}
+          allowClear
+          value={selectedItem?.name}
         >
           {availableGoodsArray.map((item) => (
             <Select.Option key={item.id} value={item.name}>
-              {item.name}
+              {item.name} / id = {item.id}
             </Select.Option>
           ))}
         </Select>

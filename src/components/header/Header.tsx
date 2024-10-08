@@ -21,6 +21,7 @@ export const Header:React.FC<Props> = ({loading,onButtonClick}) => {
   return (
     <div>
       <Layout.Header className={styles.root}>
+        {import.meta.env.VITE_HEADER}
       <Input
         className={styles.input}
         placeholder="User ID"
@@ -35,6 +36,7 @@ export const Header:React.FC<Props> = ({loading,onButtonClick}) => {
       >
         Get user info
       </Button>
+        {import.meta.env.VITE_HEADER_SECOND}
       </Layout.Header>
     </div>)
 }

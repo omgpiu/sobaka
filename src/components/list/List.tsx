@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Table, Input } from 'antd';
 import styles from './styles.module.css';
+import { Empty } from '../empty';
 
 interface Props {
   header: string;
@@ -77,6 +78,9 @@ export const ListWithModal: React.FC<Props> = ({header, data, onClick}) => {
           onClick: () => onClick && handleRowClick(record),
           style: onClick ? {cursor: 'pointer'} : undefined
         })}
+        locale={{
+          emptyText: <Empty/>
+        }}
       />
 
       {selectedItem && (

@@ -105,3 +105,13 @@ export interface IBoost {
   name: string,
   value: number
 }
+
+
+export interface IParamsAddGoods {
+  userId: IUser['UserID']
+  goods: {
+    id: IGood['id']
+    name:IGood['name']
+    quantity: number
+  }
+}
