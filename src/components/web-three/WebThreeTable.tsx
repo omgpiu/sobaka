@@ -4,28 +4,6 @@ import { IWebThree } from '../../transport';
 import { Empty } from '../empty';
 
 
-const dataSource = [
-  {
-    amount: 0.2,
-    currency: "TON",
-    id: 39,
-    userId: 289186646,
-    walletFrom: "UQBv3exBKLmQcn2Fm6VlntAInW-je1YP4U59gJxa062NCyMn",
-    status: "confirmed",
-    onChainHash: "efa02d90e8f14a027444d33b20b977c99db9f89dc1f253ff56e9343df7f5a4c6",
-    dtmStart: 1727694735
-  },
-  {
-    amount: 1.5,
-    currency: "BTC",
-    id: 45,
-    userId: 123456789,
-    walletFrom: "wallet123",
-    status: "pending",
-    onChainHash: "abc123hash",
-    dtmStart: 1727604735
-  }
-];
 
 const columns = [
   {
@@ -89,12 +67,12 @@ const columns = [
 export const WebThreeTable = () => {
   return <div>
     <h2>Транзакции WEB3</h2>
-    <Table dataSource={dataSource} columns={columns} rowKey={'id'}
+    <Table dataSource={[]} columns={columns} rowKey={'id'}
            locale={{
              emptyText: <Empty/>
            }}
            pagination={{
-             total: dataSource.length,
+             total: [].length,
              showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
              pageSize: 5
            }}
