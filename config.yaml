@@ -12,7 +12,7 @@ web:
 
 # Настройка клиентов, которые будут использовать Dex для авторизации
 staticClients:
-  - id: example-app-Ov23ligW01PTjNwnvqcz
+  - id: example-app-id
     redirectURIs:
       - 'http://localhost:5173/callback'  # URL вашего React-приложения
     name: 'sobaka'
@@ -24,6 +24,6 @@ connectors:
     id: github
     name: GitHub
     config:
-      clientID: Ov23ligW01PTjNwnvqcz  # Ваш Client ID для GitHub
-      clientSecret: 8b0c83f208b76154b289aa531395006d56b221d6  # Ваш Client Secret для GitHub
+      clientID: clientID  # Ваш Client ID для GitHub
+      clientSecret: clientSecret  # Ваш Client Secret для GitHub
       redirectURI: 'http://localhost:5556/dex/callback'
