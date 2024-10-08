@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  dex:
+    image: quay.io/dexidp/dex:latest  # Используем последнюю стабильную версию Dex
+    ports:
+      - "5556:5556"  # Пробрасываем порт для доступа к Dex на локальной машине
+    volumes:
+      - ./config.yaml:/etc/dex/config.yaml  # Монтируем файл конфигурации
+    command: serve /etc/dex/config.yaml  # Команда для запуска Dex с использованием конфигурации

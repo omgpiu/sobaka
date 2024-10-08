@@ -8,11 +8,10 @@ const {Content} = Layout;
 
 export const Main = () => {
 
-  const {isLoading,getUser, userData,goods} = useGetUserInfoQuery()
+  const {isLoading,getUserData, userData,goods, stars} = useGetUserInfoQuery()
 
   const requestHandler = (id:string)=>{
-    getUser(id)
-    console.log('CLICK')
+    getUserData(id)
   }
 
 
@@ -26,7 +25,7 @@ export const Main = () => {
         <Content>
           <div className={styles.tableGrid}>
             <div className={styles.tableBlock}>
-              <TransactionsTable/>
+              <TransactionsTable stars={stars ?? []} />
             </div>
             <div className={styles.tableBlock}>
               <WebThreeTable/>

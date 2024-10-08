@@ -1,2 +1,3 @@
-export * from './user.extractor.ts'
-export * from './availbaleGoods.extractor.ts'
+export * from './user.extractor'
+export * from './availbaleGoods.extractor'
+export * from './starTransactions.extractor'

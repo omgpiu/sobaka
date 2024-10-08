@@ -1,0 +1,29 @@
+issuer: 'http://localhost:5556/dex'
+
+# Настройка хранилища (в памяти для разработки)
+storage:
+  type: memory
+
+# Настройка веб-сервера с поддержкой CORS
+web:
+  http: 0.0.0.0:5556
+  allowedOrigins:
+    - 'http://localhost:5173'
+
+# Настройка клиентов, которые будут использовать Dex для авторизации
+staticClients:
+  - id: example-app-Ov23ligW01PTjNwnvqcz
+    redirectURIs:
+      - 'http://localhost:5173/callback'  # URL вашего React-приложения
+    name: 'sobaka'
+    secret: secret  # Секрет для вашего приложения
+
+# Настройка подключения к GitHub как внешнему OAuth 2.0 провайдеру
+connectors:
+  - type: github
+    id: github
+    name: GitHub
+    config:
+      clientID: Ov23ligW01PTjNwnvqcz  # Ваш Client ID для GitHub
+      clientSecret: 8b0c83f208b76154b289aa531395006d56b221d6  # Ваш Client Secret для GitHub
+      redirectURI: 'http://localhost:5556/dex/callback'

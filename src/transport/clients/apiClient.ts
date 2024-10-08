@@ -2,12 +2,12 @@ import axios, { AxiosInstance } from "axios"
 import {
   IAvailableGoodsResponse,
   IGood,
-  ITransaction,
+  ITransaction, ITransactionResponse,
   IUserGoodsResponse,
   IUserResponse,
   IWebThree
 } from '../types.ts';
-import { availableGoodsExtractor, userExtractor } from '../extractors';
+import { availableGoodsExtractor, starTransactionExtractor, userExtractor } from '../extractors';
 
 
 
@@ -36,14 +36,20 @@ export class ApiClient {
   }
   async getUserMining(userId: string): Promise<ReturnType<typeof userExtractor>> {
     const response = await this.axiosInstance.get<IUserResponse>(`admin/user/mining/${userId}` );
-    console.log(response,'response')
     return userExtractor(response.data);
   }
   async getStars(userId: string): Promise<ITransaction[]> {
-    const response = await this.axiosInstance.get(`buy/list/${userId}`, {
-      params: { userId },
-    });
-    return response.data;
+    const response = await this.axiosInstance.get<ITransactionResponse>(`admin/purchase/stars/${userId}`, );
+    return starTransactionExtractor(response.data.payments)
+  }
+
+  async refundUserStar(starId: number) {
+    const response = await this.axiosInstance.put(`admin/purchase/refund/${starId}`)
+    console.log(response.data);
+    return {
+      response:response.data,
+      starId
+    };
   }
 
   async getWeb3(userId: string): Promise<IWebThree> {

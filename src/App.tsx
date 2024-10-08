@@ -8,21 +8,21 @@ import { useAuth } from 'react-oidc-context';
 
 
 const App = () => {
-  const auth = useAuth();
+  // const auth = useAuth();
+  //
+  // useEffect(() => {
+  //   console.log('useEffect',auth)
+  //   if (!auth.isAuthenticated) {
+  //     console.log('HELLO REDIRECRT')
+  //     auth.signinRedirect();
+  //   }
+  // }, [auth.isAuthenticated]);
+  // console.log(auth,'auth')
+  // if (auth.isLoading) {
+  //   return <div>Загрузка...</div>;
+  // }
 
-  useEffect(() => {
-    console.log('useEffect',auth)
-    if (!auth.isAuthenticated) {
-      console.log('HELLO REDIRECRT')
-      auth.signinRedirect();
-    }
-  }, []);
-  console.log(auth,'auth')
-  if (auth.isLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (auth.isAuthenticated) {
+  // if (auth.isAuthenticated) {
     return (
       <ApiClientProvider>
         <QueryClientProvider client={queryClient}>
@@ -35,12 +35,12 @@ const App = () => {
         </QueryClientProvider>
       </ApiClientProvider>
     );
-  }
+  // }
 
-  if (auth.error) {
-    return <div>Ошибка авторизации: {auth.error.message}</div>;
-  }
-  return  <div style={{color:'black'}}>GOVNO  </div>
+  // if (auth.error) {
+  //   return <div>Ошибка авторизации: {auth.error.message}</div>;
+  // }
+  // return  <div style={{color:'black'}}>GOVNO  </div>
 };
 
 

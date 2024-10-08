@@ -47,9 +47,9 @@ export interface IUserResponse {
   Tasks: IUserTasksResponse;
 }
 
-export interface IAvailableGoodsResponse{
-  goodsAvailable:{
-    [key: string]:IGood
+export interface IAvailableGoodsResponse {
+  goodsAvailable: {
+    [key: string]: IGood
   }
 }
 
@@ -70,12 +70,15 @@ export interface ITransaction {
   currency: string;
   Good: IGood;
   amount: number;
-  status: string;
+  status: 'confirmed'|'pending'|'refunded'|'started'
   timestamp: number;
   signature: string;
   tg_pay_charge_id: string;
 }
 
+export interface ITransactionResponse {
+  payments: Record<string, ITransaction>
+}
 
 export interface IWebThree {
   amount: number;
@@ -91,5 +94,14 @@ export interface IWebThree {
 
 export type IUser = Omit<IUserResponse, 'Tasks' | 'Boost'>
 
-export interface ITask { id: string, name: string, value: boolean }
-export interface IBoost { id: string, name: string, value: number }
+export interface ITask {
+  id: string,
+  name: string,
+  value: boolean
+}
+
+export interface IBoost {
+  id: string,
+  name: string,
+  value: number
+}

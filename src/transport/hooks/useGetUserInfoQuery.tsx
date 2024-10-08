@@ -7,8 +7,7 @@ export const useGetUserInfoQuery = () => {
   const apiClient = useApiClient()
 
   const [userId, setUserId] = useState<string | null>(null);
-
-  const {data:userData, isError, isLoading, isSuccess} = useQuery({
+  const {data: userData, isError, isLoading, isSuccess} = useQuery({
     queryKey: ['user'],
     queryFn: () => apiClient.getUserMining(userId!),
     enabled: Boolean(userId),
@@ -22,8 +21,20 @@ export const useGetUserInfoQuery = () => {
     staleTime: 60000,
   });
 
-  const userGoods = useMemo(()=>{
-    if(!userData?.user.Goods || !goodsData || !goodsData.availableGoods) return []
+  const {
+    data: stars,
+    isError: isStarsError,
+    isLoading: isStarsLoading,
+  } = useQuery({
+    queryKey: ['stars'],
+    queryFn: () => apiClient.getStars(userId!),
+    enabled: Boolean(userId),
+    staleTime: 1000,
+  });
+
+
+  const userGoods = useMemo(() => {
+    if (!userData?.user.Goods || !goodsData || !goodsData.availableGoods) return []
     const result = [];
 
     for (const [id, count] of Object.entries(userData?.user.Goods)) {
@@ -40,8 +51,7 @@ export const useGetUserInfoQuery = () => {
       }
     }
     return result
-  },[goodsData,userData?.user])
-
+  }, [goodsData, userData?.user])
 
 
   useEffect(() => {
@@ -56,13 +66,14 @@ export const useGetUserInfoQuery = () => {
 
   return {
     isSuccess,
-    isError: isError || isErrorGoods,
-    isLoading: isLoading || isGoodsLoading,
+    isError: isError || isErrorGoods || isStarsError,
+    isLoading: isLoading || isGoodsLoading || isStarsLoading,
     userData: userData,
-    goods:{
-      goodsArray:goodsData?.goodsArray,
-      userGoods:userGoods
+    goods: {
+      goodsArray: goodsData?.goodsArray,
+      userGoods: userGoods
     },
-    getUser: handleClick
+    stars,
+    getUserData: handleClick,
   }
 }
