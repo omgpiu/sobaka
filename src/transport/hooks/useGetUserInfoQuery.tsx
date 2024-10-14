@@ -8,14 +8,20 @@ export const useGetUserInfoQuery = () => {
   const apiClient = useApiClient()
 
   const [userId, setUserId] = useState<string | null>(null);
-  const {data: userData, isError, isLoading, isSuccess,refetch:refetchUser} = useQuery({
+  const {data: userData, isError, isLoading, isSuccess, refetch: refetchUser, error: userError} = useQuery({
     queryKey: ['user'],
     queryFn: () => apiClient?.getUserMining(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });
 
-  const {data: goodsData, isError: isErrorGoods, isLoading: isGoodsLoading} = useQuery({
+  const {
+    data: goodsData,
+    isError: isErrorGoods,
+    isLoading: isGoodsLoading,
+    error: goodsError,
+    refetch: refetchGoods
+  } = useQuery({
     queryKey: ['availableGoods'],
     queryFn: () => apiClient?.getAvailableGoods(),
     enabled: Boolean(userId),
@@ -26,6 +32,8 @@ export const useGetUserInfoQuery = () => {
     data: stars,
     isError: isStarsError,
     isLoading: isStarsLoading,
+    error: starsError,
+    refetch: refetchStar
   } = useQuery({
     queryKey: ['stars'],
     queryFn: () => apiClient?.getStars(userId!),
@@ -53,29 +61,53 @@ export const useGetUserInfoQuery = () => {
     }
     return result
   }, [goodsData, userData?.user.Goods])
+  const handleRetry = () => {
+
+    //@ts-ignore
+    if (userError?.response?.status === 500) {
+      refetchUser();
+      console.log("1");
+    }
+
+    //@ts-ignore
+    if (goodsError?.response?.status === 500) {
+      refetchGoods();
+      console.log("2");
+    }
+
+    //@ts-ignore
+    if (starsError?.response?.status === 500) {
+      refetchStar();
+      console.log("3");
+    }
+  };
 
   const handleClick = (id: string) => {
     setUserId(id);
+    if (userError || goodsError || starsError) {
+      handleRetry()
+    }
+
   };
 
   useEffect(() => {
-    if(userId){
+    if (userId) {
       refetchUser()
     }
   }, [userId]);
 
   useEffect(() => {
-    if(isError){
+    if (isError) {
       message.error('Ошибка с данными юзера, проверь айди')
     }
-    if(isErrorGoods){
+    if (isErrorGoods) {
       message.error('Ошибка с получением мапы гудсов')
     }
-    if(isStarsError) {
+    if (isStarsError) {
       message.error('Ошибка с получением старс транзакций')
     }
 
-  }, [isError,isErrorGoods,isStarsError]);
+  }, [isError, isErrorGoods, isStarsError]);
 
   return {
     isSuccess,
