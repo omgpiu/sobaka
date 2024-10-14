@@ -13,8 +13,7 @@ export class ApiClient {
   private axiosInstance: AxiosInstance;
   readonly token:string
   constructor(token: string) {
-    this.token = import.meta.env.VITE_API_TOKEN ?? token
-
+    this.token = token
     this.axiosInstance = axios.create({
       baseURL: "https://dev.notpx.app/api/v1",
       headers: {
