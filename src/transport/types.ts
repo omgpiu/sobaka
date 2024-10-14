@@ -11,37 +11,56 @@ export interface IUserGoodsResponse {
 }
 
 
-export interface IUserResponse {
+export interface IUserOverviewResponse {
+  "id": number,
+  "firstName": string,
+  "lastName":string,
+  "balance": number,
+  "repaints": number,
+  "score": null,
+  "language": string,
+  "isPremium": boolean,
+  "friends": number,
+  "intro": boolean,
+  "userPic": string,
+  "league": string,
+  "templateId": number,
+  "squad": {
+    "id": number,
+    "name": string,
+    "slug": string,
+    "logo": string,
+    "templateX": number,
+    "templateY": number,
+    "players": null | number,
+    "totalBalance": null | number,
+    "totalRepaints": null | number,
+    "scoredRepaints": null | number
+  },
+  "goods": null | IGood,
+  "refLimit": number,
+  "comment": string,
+  "websocketToken": string
+  isBanned?:boolean
+}
+
+export interface IUserMiningResponse {
+  "Username": "",
+  "Started": 1728935068,
+  "Stopped": 0,
+  "Updated": 0,
+  "Speed": 9.744,
+  "Squad": 573790,
+  "ChargeTimer": 1728914253994,
+  "RepaintReward": 1,
   UserID: number
-  FirstName: string
-  LastName: string
   Balance: number
-  Repaints: number
-  Score: null | number
-  Language: string,
-  IsPremium: boolean,
-  Friends: number,
-  Intro: boolean,
-  UserPic: string
   League: string
-  Squad: {
-    slug: number
-    id: number
-  }
-  IsBanned?: boolean
   Coins: number;
-  SpeedPerSecond: number;
-  FromStart: number;
-  FromUpdate: number;
-  MaxMiningTime: number;
-  Claimed: number;
   Boost: IUserBoostsResponse;
   RepaintsTotal: number;
-  UserBalance: number;
-  Activated: boolean;
   Charges: number;
   MaxCharges: number;
-  ReChargeTimer: number;
   ReChargeSpeed: number;
   Goods: IUserGoodsResponse;
   Tasks: IUserTasksResponse;
@@ -105,8 +124,8 @@ export interface IWebThree {
   dtmStart: number;
 }
 
-
-export type IUser = Omit<IUserResponse, 'Tasks' | 'Boost'>
+export type UserExtracted = Pick<IUserOverviewResponse, 'userPic'|'firstName'|'lastName'|'league'|'isBanned'|'comment'|'language'|'friends'>
+export type IUser = Omit<IUserMiningResponse, 'Tasks' | 'Boost'> & UserExtracted
 
 export interface ITask {
   id: string,

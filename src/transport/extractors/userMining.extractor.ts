@@ -1,12 +1,12 @@
-import { IBoost, ITask, IUser, IUserResponse } from '../types.ts';
+import { IBoost, ITask,  IUserMiningResponse } from '../types.ts';
 
-export interface userExtracted {
-  user: IUser,
+export interface UserMiningExtracted {
+  user:Omit<IUserMiningResponse, 'Tasks' | 'Boost'>
   tasksArray: ITask[],
   boostsArray: IBoost[]
 }
 
-export const userExtractor = (userData: IUserResponse): userExtracted => {
+export const userMiningExtractor = (userData: IUserMiningResponse): UserMiningExtracted => {
   const {Tasks, Boost, ...user} = userData;
 
   const tasksArray = Tasks ? Object.entries(Tasks).map(([id, value]) => ({
@@ -22,7 +22,7 @@ export const userExtractor = (userData: IUserResponse): userExtracted => {
   })) : [];
 
   return {
-    user: user ?? {},
+    user,
     tasksArray,
     boostsArray
   }

@@ -14,7 +14,6 @@ export const Main = () => {
     getUserData(id)
   }
 
-
   return (
     <>
       <Header onButtonClick={requestHandler} loading={isLoading}/>

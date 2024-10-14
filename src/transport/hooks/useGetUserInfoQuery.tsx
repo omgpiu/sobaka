@@ -11,7 +11,23 @@ export const useGetUserInfoQuery = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const {data: userData, isError, isLoading, isSuccess, refetch: refetchUser, error: userError} = useQuery({
     queryKey: ['user'],
-    queryFn: () => apiClient?.getUserMining(userId!),
+    queryFn: async () => {
+      const [userMiningData, userData] = await Promise.all([
+        apiClient?.getUserMining(userId!),
+        apiClient?.getUser(userId!)
+      ]);
+
+      return {
+        boostsArray: userMiningData!.boostsArray,
+        tasksArray: userMiningData!.tasksArray,
+        user: {
+          ...userData,
+          ...userMiningData!.user
+        }
+
+
+      }
+    },
     enabled: Boolean(userId),
     staleTime: 1000,
   });
@@ -43,7 +59,7 @@ export const useGetUserInfoQuery = () => {
   });
 
   const userGoods = useMemo<IGoodsExtended[]>(() => {
-    if (!userData?.user.Goods || !goodsData) return [];
+    if (!userData?.user || !userData?.user.Goods || !goodsData) return [];
 
     return goodsData
       .filter(good => userData.user.Goods[good.id])

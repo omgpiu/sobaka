@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { IParamsAddGoods } from '../types';
-import { userExtracted } from '../extractors';
+import { type UserMiningExtracted } from '../extractors';
 
 
 export const useAddGoods = () => {
@@ -11,13 +11,12 @@ export const useAddGoods = () => {
   const {mutateAsync, isError, isSuccess, data,isPending} = useMutation({
       mutationFn: (params: Omit<IParamsAddGoods,'userId'>) => {
 
-        const userData = queryClient.getQueryData(['user']) as userExtracted
+        const userData = queryClient.getQueryData(['user']) as UserMiningExtracted
         const userId = userData.user.UserID
 
         return apiClient!.addGoods({ ...params, userId });
       },
     onSuccess: () => {
-      console.log('onSUCCES')
       queryClient.invalidateQueries({ queryKey: ['user'] })
     }
     },

@@ -5,10 +5,10 @@ import styles from './styles.module.css';
 import { IUser, useUserBanMutation, useUserDeleteMutation } from '../../transport';
 
 interface Props {
-  user?: IUser
+  user: IUser
 }
 
-export const UserInfo: React.FC<Props> = ({user={}}) => {
+export const UserInfo: React.FC<Props> = ({user}) => {
 
   const {banUser} = useUserBanMutation()
   const {deleteUser} = useUserDeleteMutation()
@@ -33,12 +33,12 @@ export const UserInfo: React.FC<Props> = ({user={}}) => {
   const content = (<Card className={styles.cardContainer}>
     <div className={styles.info}>
       <div className={styles.userPic}>
-        {user.UserPic ? (
-          <img src={user.UserPic} alt="User" className={styles.userPic}/>
+        {user?.userPic ? (
+          <img src={user?.userPic} alt="User" className={styles.userPic}/>
         ) : (
           <div className={styles.noPhoto}>No Pic</div>
         )}
-        {user.IsBanned && (
+        {user?.isBanned && (
           <div className={styles.banned}>
             BANNED
           </div>
@@ -46,23 +46,22 @@ export const UserInfo: React.FC<Props> = ({user={}}) => {
       </div>
 
       <div className={styles.userInfo}>
-        <p><strong>Name:</strong> {user.FirstName} {user.LastName || "(no last name)"}</p>
-        <p><strong>ID:</strong> {user.UserID}</p>
-        <p><strong>Balance:</strong> {user.Balance} </p>
-        <p><strong>Repaints:</strong> {user.Repaints}</p>
-        <p><strong>League:</strong> {user.League}</p>
-        <p><strong>Language:</strong> {user.Language}</p>
-        <p><strong>Friends:</strong> {user.Friends}</p>
-        <p><strong>Status:</strong> {user.IsPremium ? 'Premium' : 'Standard'}</p>
-        <p><strong>Intro Completed:</strong> {user.Intro ? 'Yes' : 'No'}</p>
-        <p><strong>Banned:</strong> {user.IsBanned ? 'Yes' : 'No'}</p>
+        <p><strong>Name:</strong> {user?.firstName} {user?.lastName || "(no last name)"}</p>
+        <p><strong>ID:</strong> {user?.UserID}</p>
+        <p><strong>Balance:</strong> {user?.Balance} </p>
+        <p><strong>Repaints:</strong> {user?.RepaintsTotal}</p>
+        <p><strong>League:</strong> {user?.League}</p>
+        <p><strong>Language:</strong> {user?.language}</p>
+        <p><strong>Friends:</strong> {user?.friends}</p>
+        <p><strong>Comment:</strong> {user?.comment ? user.comment : "-"}</p>
+        <p><strong>Banned:</strong> {user?.isBanned ? 'Yes' : 'No'}</p>
       </div>
     </div>
     <div className={styles.buttonsContainer}>
       <Button
         className={styles.buttonBan}
         onClick={handleBan}
-        disabled={user.IsBanned}
+        disabled={user?.isBanned}
       >
         Ban
       </Button>
@@ -77,7 +76,7 @@ export const UserInfo: React.FC<Props> = ({user={}}) => {
   </Card>)
 
   const panelHeader = <span
-    className={clsx({[styles.collapseHeaderBanned]: user.IsBanned},styles.collapsedHeader)}>{user.FirstName}  {user.IsBanned && '- USER IS BANNED'}</span>
+    className={clsx({[styles.collapseHeaderBanned]: user?.isBanned},styles.collapsedHeader)}>{user?.firstName}  {user?.isBanned && '- USER IS BANNED'}</span>
 
   const items = [
     {

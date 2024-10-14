@@ -1,17 +1,24 @@
 import axios, { AxiosInstance } from "axios"
 import {
-  IAvailableGoodsResponse, IParamsAddGoods,
+  IAvailableGoodsResponse,
+  IParamsAddGoods,
   ITransaction,
   ITransactionResponse,
-  IUserResponse,
+  IUserMiningResponse, IUserOverviewResponse, UserExtracted,
 } from '../types';
-import { availableGoodsExtractor, starTransactionExtractor, userExtractor } from '../extractors';
-
+import {
+  availableGoodsExtractor,
+  starTransactionExtractor,
+  UserMiningExtracted,
+  userMiningExtractor,
+  userOverviewExtractor
+} from '../extractors';
 
 
 export class ApiClient {
   private axiosInstance: AxiosInstance;
-  readonly token:string
+  readonly token: string
+
   constructor(token: string) {
     this.token = token
     this.axiosInstance = axios.create({
@@ -33,32 +40,32 @@ export class ApiClient {
     return response.data;
   }
 
-  async deleteUser(userId: number){
+  async deleteUser(userId: number) {
     const response = await this.axiosInstance.delete(`admin/delete/${userId}`);
     return response.data;
   }
 
-  async getUser(userId: string): Promise<ReturnType<typeof userExtractor>> {
-    const response = await this.axiosInstance.get<IUserResponse>(`admin/user/${userId}`);
-    return userExtractor(response.data);
-  }
-  async getUserMining(userId: string): Promise<ReturnType<typeof userExtractor>> {
-    const response = await this.axiosInstance.get<IUserResponse>(`admin/user/mining/${userId}` );
-    return userExtractor(response.data);
+  async getUser(userId: string): Promise<UserExtracted> {
+    const response = await this.axiosInstance.get<IUserOverviewResponse>(`admin/user/${userId}`);
+    return userOverviewExtractor(response.data);
   }
 
+  async getUserMining(userId: string): Promise<UserMiningExtracted> {
+    const response = await this.axiosInstance.get<IUserMiningResponse>(`admin/user/mining/${userId}`);
+    return userMiningExtractor(response.data);
+  }
 
 
   //stars
   async getStars(userId: string): Promise<ITransaction[]> {
-    const response = await this.axiosInstance.get<ITransactionResponse>(`admin/purchase/stars/${userId}`, );
+    const response = await this.axiosInstance.get<ITransactionResponse>(`admin/purchase/stars/${userId}`,);
     return starTransactionExtractor(response.data.payments)
   }
 
   async refundUserStar(starId: number) {
     const response = await this.axiosInstance.put(`admin/purchase/refund/${starId}`)
     return {
-      response:response.data,
+      response: response.data,
       starId
     };
   }
@@ -70,8 +77,8 @@ export class ApiClient {
     return availableGoodsExtractor(response.data)
   }
 
-  async addGoods(params:IParamsAddGoods) {
-    const response = await this.axiosInstance.post("admin/goods/add",params);
+  async addGoods(params: IParamsAddGoods) {
+    const response = await this.axiosInstance.post("admin/goods/add", params);
     return response.data
   }
 
