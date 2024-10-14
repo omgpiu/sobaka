@@ -10,14 +10,14 @@ export const useGetUserInfoQuery = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const {data: userData, isError, isLoading, isSuccess,refetch:refetchUser} = useQuery({
     queryKey: ['user'],
-    queryFn: () => apiClient.getUserMining(userId!),
+    queryFn: () => apiClient?.getUserMining(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });
 
   const {data: goodsData, isError: isErrorGoods, isLoading: isGoodsLoading} = useQuery({
     queryKey: ['availableGoods'],
-    queryFn: () => apiClient.getAvailableGoods(),
+    queryFn: () => apiClient?.getAvailableGoods(),
     enabled: Boolean(userId),
     staleTime: 60000,
   });
@@ -28,7 +28,7 @@ export const useGetUserInfoQuery = () => {
     isLoading: isStarsLoading,
   } = useQuery({
     queryKey: ['stars'],
-    queryFn: () => apiClient.getStars(userId!),
+    queryFn: () => apiClient?.getStars(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });

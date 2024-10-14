@@ -18,7 +18,8 @@ export const ApiClientProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => {
     const initializeClient = async () => {
       try {
-        const token = userToken ?? localStorage.getItem('token')
+        const token = userToken || localStorage.getItem('token')
+
         if(token){
           const apiClient = new ApiClient(token);
           setClient(apiClient);
