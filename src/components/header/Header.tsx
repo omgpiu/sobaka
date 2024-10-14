@@ -9,7 +9,7 @@ interface Props {
 
 }
 export const Header:React.FC<Props> = ({loading,onButtonClick}) => {
-  const [userId,setUserId] = useState('289186646')
+  const [userId,setUserId] = useState('')
   const [userToken,setUserToken] = useState('')
   const [_,setLocalToken] = useUserToken()
   const handleInputChange = (e:any) => {
