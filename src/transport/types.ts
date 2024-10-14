@@ -48,19 +48,33 @@ export interface IUserResponse {
 }
 
 export interface IAvailableGoodsResponse {
-  goodsAvailable: {
-    [key: string]: IGood
-  }
+  goodsAvailable: IGood[]
 }
+
+interface IGoodPrice {
+  currency_id:number;
+  currency_name: "NOT"|"TON"|"XTR"|"DOGS"
+  price:number;
+
+}
+
 
 export interface IGood {
   id: number;
   name: string;
   description: string;
   image_url: string;
-  price: number;
-  currency: string;
+  prices: IGoodPrice[];
   isOnePiece: boolean;
+}
+
+
+export interface IGoodsExtended extends IGood {
+  quantity:number
+  price: {
+    currency: 'XTR',
+    amount: number,
+  }
 }
 
 export interface ITransaction {

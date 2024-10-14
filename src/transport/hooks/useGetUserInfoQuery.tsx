@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { useEffect, useMemo, useState } from 'react';
 import { message } from 'antd';
+import { IGoodsExtended } from '../types.ts';
 
 
 export const useGetUserInfoQuery = () => {
@@ -41,26 +42,26 @@ export const useGetUserInfoQuery = () => {
     staleTime: 1000,
   });
 
+  const userGoods = useMemo<IGoodsExtended[]>(() => {
+    if (!userData?.user.Goods || !goodsData) return [];
 
-  const userGoods = useMemo(() => {
-    if (!userData?.user.Goods || !goodsData || !goodsData.availableGoods) return []
-    const result = [];
+    return goodsData
+      .filter(good => userData.user.Goods[good.id])
+      .map(good => {
+        const priceXTR = good.prices.find(price => price.currency_name === 'XTR')?.price ?? 0;
 
-    for (const [id, count] of Object.entries(userData?.user.Goods)) {
-      const goodId = Number(id);
-      const good = goodsData.availableGoods[goodId];
+        return {
+          ...good,
+          quantity: userData.user.Goods[good.id],
+          price: {
+            currency: 'XTR',
+            amount: priceXTR,
+          }
+        };
+      });
+  }, [goodsData, userData?.user.Goods]);
 
-      if (good) {
-        for (let i = 0; i < count; i++) {
-          result.push({
-            ...good,
-            inner_id: `${good.id}`.repeat(i + 1),
-          });
-        }
-      }
-    }
-    return result
-  }, [goodsData, userData?.user.Goods])
+
   const handleRetry = () => {
 
     //@ts-ignore
@@ -115,7 +116,7 @@ export const useGetUserInfoQuery = () => {
     isLoading: isLoading || isGoodsLoading || isStarsLoading,
     userData: userData,
     goods: {
-      goodsArray: goodsData?.goodsArray,
+      goodsArray: goodsData,
       userGoods: userGoods
     },
     stars,

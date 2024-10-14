@@ -96,7 +96,9 @@ export const TransactionsTable:React.FC<Props> = ({stars}) => {
       title: 'Timestamp',
       dataIndex: 'timestamp',
       key: 'timestamp',
+      width:150,
       render: (timestamp: number) => <TooltipClipBoard
+        withCustomWidth
         title={new Date(timestamp).toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})}/>,
       sorter: (a: ITransaction, b: ITransaction) => a.timestamp - b.timestamp
     },

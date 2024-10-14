@@ -1,7 +1,9 @@
 import { Button, Input, message, Modal, Select, Table } from 'antd';
 import React, { useState } from 'react';
-import { IGood, IParamsAddGoods, useAddGoods } from '../../transport';
+import { IGood, IGoodsExtended, IParamsAddGoods, useAddGoods } from '../../transport';
 import { Empty } from '../empty';
+
+
 
 const columns = [
   {
@@ -15,8 +17,9 @@ const columns = [
       {text: '5', value: 5},
       {text: '6', value: 6},
     ],
-    onFilter: (value: any, record: IGood) => record.id === value,
+    onFilter: (value: any, record: IGoodsExtended) => record.id === value,
     sorter: (a: IGood, b: IGood) => a.id - b.id,
+    width: 50
   },
   {
     title: 'Name',
@@ -31,43 +34,53 @@ const columns = [
     ],
     onFilter: (value: any, record: IGood): boolean => record.name === value,
     sorter: (a: IGood, b: IGood) => a.name.localeCompare(b.name),
+    width: 250
   },
   {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-    width: 250,
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    sorter: (a: IGoodsExtended, b: IGoodsExtended) =>{
+      return a.quantity - b.quantity
+    },
+    width:60
   },
   {
     title: 'Image',
     dataIndex: 'image_url',
     key: 'image_url',
     render: (url: string) => <img src={url} alt="icon" style={{width: 20, height: 20}}/>,
+    width: 60
   },
   {
     title: 'Price',
     dataIndex: 'price',
     key: 'price',
-    sorter: (a: IGood, b: IGood) => a.price - b.price,
-    render: (price: number, record: IGood) => `${price} ${record.currency}`,
-  },
+    sorter: (a: IGoodsExtended, b: IGoodsExtended) => a.price.amount - b.price.amount,
+    render: (price: IGoodsExtended['price']) => `${price.amount} ${price.currency}`},
   {
-    title: 'Is One Piece',
+    title: 'One piece',
     dataIndex: 'isOnePiece',
     key: 'isOnePiece',
     filters: [
       {text: 'Yes', value: true},
       {text: 'No', value: false},
     ],
-    onFilter: (value: any, record: IGood) => record.isOnePiece === value,
+    onFilter: (value: any, record: IGoodsExtended) => record.isOnePiece === value,
     render: (isOnePiece: boolean) => (isOnePiece ? 'Yes' : 'No'),
     sorter: (a: IGood, b: IGood) => Number(a.isOnePiece) - Number(b.isOnePiece),
+    width: 150
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
   },
 ];
 
 interface Props {
   availableGoodsArray?: { id: IGood['id'], name: IGood['name'] }[]
-  userGoods: Array<IGood & { inner_id: string }>
+  userGoods: Array<IGoodsExtended>
 }
 
 export const GoodsTable: React.FC<Props> = ({availableGoodsArray = [], userGoods = []}) => {
@@ -121,11 +134,7 @@ export const GoodsTable: React.FC<Props> = ({availableGoodsArray = [], userGoods
            locale={{
              emptyText: <Empty/>
            }}
-           pagination={{
-             total: userGoods.length,
-             showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
-             pageSize: 5
-           }} rowKey={'inner_id'}/>
+           rowKey={'id'}/>
     <Modal
       title="Добавить товар"
       open={isModalVisible}
