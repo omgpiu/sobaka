@@ -6,7 +6,7 @@ export const useUserDeleteMutation = () => {
   const queryClient = useQueryClient();
 
   const {mutateAsync, isError, isSuccess, data} = useMutation({
-      mutationFn: (userId: number) => apiClient.deleteUser(userId),
+      mutationFn: (userId: number) => apiClient!.deleteUser(userId),
     onSuccess: () => queryClient.removeQueries()
     },
   );

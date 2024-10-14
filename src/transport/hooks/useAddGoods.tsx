@@ -14,7 +14,7 @@ export const useAddGoods = () => {
         const userData = queryClient.getQueryData(['user']) as userExtracted
         const userId = userData.user.UserID
 
-        return apiClient.addGoods({ ...params, userId });
+        return apiClient!.addGoods({ ...params, userId });
       },
     onSuccess: () => {
       console.log('onSUCCES')

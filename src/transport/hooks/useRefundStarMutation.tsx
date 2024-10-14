@@ -7,7 +7,7 @@ export const useRefundStarMutation = () => {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isError, isSuccess, data,isPending } = useMutation({
-    mutationFn: (starId: number) => apiClient.refundUserStar(starId),
+    mutationFn: (starId: number) => apiClient!.refundUserStar(starId),
     onSuccess: ({starId}: {starId:number}) => {
       console.log('oNSUCCES',starId)
       queryClient.setQueryData(['stars'], (oldData: ITransaction[] | undefined) => {
