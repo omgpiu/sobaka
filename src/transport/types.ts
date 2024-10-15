@@ -121,9 +121,14 @@ export interface IWebThree {
   walletFrom: string;
   status: string;
   onChainHash: string;
-  dtmStart: number;
+  dttmStart: number;
+  quantity:number
+  goodId:number
+  goodName:string
 }
-
+export interface IWebThreeResponse {
+  payments: Record<string, IWebThree>
+}
 export type UserExtracted = Pick<IUserOverviewResponse, 'userPic'|'firstName'|'lastName'|'league'|'isBanned'|'comment'|'language'|'friends'>
 export type IUser = Omit<IUserMiningResponse, 'Tasks' | 'Boost'> & UserExtracted
 

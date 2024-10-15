@@ -4,14 +4,14 @@ import {
   IParamsAddGoods,
   ITransaction,
   ITransactionResponse,
-  IUserMiningResponse, IUserOverviewResponse, UserExtracted,
+  IUserMiningResponse, IUserOverviewResponse, IWebThree, IWebThreeResponse, UserExtracted,
 } from '../types';
 import {
   availableGoodsExtractor,
   starTransactionExtractor,
   UserMiningExtracted,
   userMiningExtractor,
-  userOverviewExtractor
+  userOverviewExtractor, web3TransactionsExtractor
 } from '../extractors';
 
 
@@ -80,6 +80,13 @@ export class ApiClient {
   async addGoods(params: IParamsAddGoods) {
     const response = await this.axiosInstance.post("admin/goods/add", params);
     return response.data
+  }
+
+  //web3
+
+  async getWebThreeTransactions(userId: string): Promise<IWebThree[]> {
+    const response = await this.axiosInstance.get<IWebThreeResponse>(`admin/purchase/web3/${userId}`,);
+    return web3TransactionsExtractor(response.data)
   }
 
 }

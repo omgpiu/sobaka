@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { useEffect, useMemo, useState } from 'react';
 import { message } from 'antd';
-import { IGoodsExtended } from '../types.ts';
+import { IGoodsExtended, IUser } from '../types.ts';
 
 
 export const useGetUserInfoQuery = () => {
@@ -23,7 +23,7 @@ export const useGetUserInfoQuery = () => {
         user: {
           ...userData,
           ...userMiningData!.user
-        }
+        }  as IUser
 
 
       }
@@ -58,6 +58,21 @@ export const useGetUserInfoQuery = () => {
     staleTime: 1000,
   });
 
+
+
+  const {
+    data: web3,
+    isError: isWeb3Error,
+    isLoading: isWeb3Loading,
+    error: web3Error,
+    refetch: refetchWeb3
+  } = useQuery({
+    queryKey: ['web3'],
+    queryFn: () => apiClient?.getWebThreeTransactions(userId!),
+    enabled: Boolean(userId),
+    staleTime: 1000,
+  });
+
   const userGoods = useMemo<IGoodsExtended[]>(() => {
     if (!userData?.user || !userData?.user.Goods || !goodsData) return [];
 
@@ -83,19 +98,21 @@ export const useGetUserInfoQuery = () => {
     //@ts-ignore
     if (userError?.response?.status === 500) {
       refetchUser();
-      console.log("1");
     }
 
     //@ts-ignore
     if (goodsError?.response?.status === 500) {
       refetchGoods();
-      console.log("2");
     }
 
     //@ts-ignore
     if (starsError?.response?.status === 500) {
       refetchStar();
-      console.log("3");
+    }
+
+    //@ts-ignore
+    if (web3Error?.response?.status === 500) {
+      refetchWeb3();
     }
   };
 
@@ -128,14 +145,15 @@ export const useGetUserInfoQuery = () => {
 
   return {
     isSuccess,
-    isError: isError || isErrorGoods || isStarsError,
-    isLoading: isLoading || isGoodsLoading || isStarsLoading,
+    isError: isError || isErrorGoods || isStarsError || isWeb3Error,
+    isLoading: isLoading || isGoodsLoading || isStarsLoading || isWeb3Loading,
     userData: userData,
     goods: {
       goodsArray: goodsData,
       userGoods: userGoods
     },
     stars,
+    web3,
     getUserData: handleClick,
   }
 }
