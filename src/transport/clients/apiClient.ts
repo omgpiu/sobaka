@@ -22,7 +22,7 @@ export class ApiClient {
   constructor(token: string) {
     this.token = token
     this.axiosInstance = axios.create({
-      baseURL: "https://dev.notpx.app/api/v1",
+      baseURL: "https://notpx.app/api/v1",
       headers: {
         "Content-Type": "application/json",
       },
@@ -36,7 +36,7 @@ export class ApiClient {
 
   //user
   async banUser(userId: number) {
-    const response = await this.axiosInstance.put(`admin/ban/${userId}`);
+    const response = await this.axiosInstance.delete(`admin/ban/${userId}`);
     return response.data;
   }
 
