@@ -145,7 +145,7 @@ export const TransactionsTable:React.FC<Props> = ({stars}) => {
            pagination={{
              total: stars.length,
              showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
-             pageSize: 5
+             pageSize: 50
            }}
     />
   </div>
