@@ -71,7 +71,7 @@ export const ListWithModal: React.FC<Props> = ({header, data, onClick}) => {
         pagination={{
           total: data.length,
           showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} элементов`,
-          pageSize:5
+          pageSize:50
         }}
         rowKey={'id'}
         onRow={(record) => ({
