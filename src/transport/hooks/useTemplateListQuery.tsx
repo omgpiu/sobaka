@@ -1,35 +1,24 @@
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
-import { useEffect, useState } from 'react';
-
+import { usePagination } from '../../hooks';
 
 export const useTemplateListQuery = () => {
   const apiClient = useApiClient()
-
-  const [userId, setUserId] = useState<string | null>(null);
-
-  const {data, isError, isLoading, isSuccess} = useQuery({
-    queryKey: ['templateList'],
-    queryFn: () => apiClient!.getTemplateList(),
-    enabled: Boolean(userId),
+  const { limit, offset, updatePagination } = usePagination(20);
+  const { data, isError, isLoading, isSuccess } = useQuery({
+    queryKey: ['templateList', limit, offset],
+    queryFn: () => apiClient.getTemplateList({ limit, offset }),
     staleTime: 1000,
+    placeholderData: keepPreviousData
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      setUserId(null)
-    }
-  }, [isSuccess])
-
-  const handleClick = (id: string) => {
-    setUserId(id);
-  };
 
   return {
     isSuccess,
     isError,
     isLoading,
     data,
-    getAvailableGoods: handleClick
+    limit,
+    offset,
+    updatePagination
   }
 }

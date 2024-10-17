@@ -1,4 +1,11 @@
-export const TemplatesPage = ()=>{
+import { TemplatesTable } from '../../components';
+import styles from './styles.module.css'
 
-  return <div className="">TemplatesPage</div>
+export const TemplatesPage = () => {
+
+  return (
+    <div className={ styles.root }>
+      <TemplatesTable />
+    </div>
+  )
 }

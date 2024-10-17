@@ -3,26 +3,26 @@ import { useApiClient } from '../../context';
 import { useEffect, useState } from 'react';
 
 
-export const useGetAvailableGoods = () => {
+export const useTemplateQuery = () => {
   const apiClient = useApiClient()
 
-  const [userId, setUserId] = useState<string | null>(null);
+  const [templateId, setTemplateId] = useState< null | string >(null);
 
   const {data, isError, isLoading, isSuccess} = useQuery({
-    queryKey: ['availableGoods'],
-    queryFn: () => apiClient!.getAvailableGoods(),
-    enabled: Boolean(userId),
+    queryKey: ['templateSingle'],
+    queryFn: () => apiClient.getTemplate(templateId!),
+    enabled: Boolean(templateId),
     staleTime: 1000,
   });
 
   useEffect(() => {
     if (isSuccess) {
-      setUserId(null)
+      setTemplateId(null)
     }
   }, [isSuccess])
 
-  const handleClick = (id: string) => {
-    setUserId(id);
+  const handleClick = (templateId: string) => {
+    setTemplateId(templateId);
   };
 
   return {
@@ -30,6 +30,6 @@ export const useGetAvailableGoods = () => {
     isError,
     isLoading,
     data,
-    getAvailableGoods: handleClick
+    getSingleTemplate: handleClick
   }
 }

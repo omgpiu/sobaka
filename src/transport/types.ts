@@ -1,3 +1,8 @@
+export interface IPaginationParams {
+  limit: number;
+  offset: number;
+}
+
 type IUserBoostsResponse = {
   [key: string]: number;
 };
@@ -14,7 +19,7 @@ export interface IUserGoodsResponse {
 export interface IUserOverviewResponse {
   "id": number,
   "firstName": string,
-  "lastName":string,
+  "lastName": string,
   "balance": number,
   "repaints": number,
   "score": null,
@@ -41,7 +46,7 @@ export interface IUserOverviewResponse {
   "refLimit": number,
   "comment": string,
   "websocketToken": string
-  isBanned?:boolean
+  isBanned?: boolean
 }
 
 export interface IUserMiningResponse {
@@ -71,9 +76,9 @@ export interface IAvailableGoodsResponse {
 }
 
 interface IGoodPrice {
-  currency_id:number;
-  currency_name: "NOT"|"TON"|"XTR"|"DOGS"
-  price:number;
+  currency_id: number;
+  currency_name: "NOT" | "TON" | "XTR" | "DOGS"
+  price: number;
 
 }
 
@@ -89,7 +94,7 @@ export interface IGood {
 
 
 export interface IGoodsExtended extends IGood {
-  quantity:number
+  quantity: number
   price: {
     currency: 'XTR',
     amount: number,
@@ -103,7 +108,7 @@ export interface ITransaction {
   currency: string;
   Good: IGood;
   amount: number;
-  status: 'confirmed'|'pending'|'refunded'|'started'
+  status: 'confirmed' | 'pending' | 'refunded' | 'started'
   timestamp: number;
   signature: string;
   tg_pay_charge_id: string;
@@ -122,14 +127,16 @@ export interface IWebThree {
   status: string;
   onChainHash: string;
   dttmStart: number;
-  quantity:number
-  goodId:number
-  goodName:string
+  quantity: number
+  goodId: number
+  goodName: string
 }
+
 export interface IWebThreeResponse {
   payments: Record<string, IWebThree>
 }
-export type UserExtracted = Pick<IUserOverviewResponse, 'userPic'|'firstName'|'lastName'|'league'|'isBanned'|'comment'|'language'|'friends'>
+
+export type UserExtracted = Pick<IUserOverviewResponse, 'userPic' | 'firstName' | 'lastName' | 'league' | 'isBanned' | 'comment' | 'language' | 'friends'>
 export type IUser = Omit<IUserMiningResponse, 'Tasks' | 'Boost'> & UserExtracted
 
 export interface ITask {
@@ -149,7 +156,16 @@ export interface IParamsAddGoods {
   userId: IUser['UserID']
   goods: {
     id: IGood['id']
-    name:IGood['name']
+    name: IGood['name']
     quantity: number
   }
 }
+
+
+export interface ITemplate {
+  templateId: string,
+  url: string,
+  subscribers: number
+}
+
+export type ITemplateListResponse = ITemplate[]

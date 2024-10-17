@@ -10,7 +10,7 @@ export const useAvailableGoodsQuery = () => {
 
   const {data, isError, isLoading, isSuccess} = useQuery({
     queryKey: ['availableGoods'],
-    queryFn: () => apiClient!.getAvailableGoods(),
+    queryFn: () => apiClient.getAvailableGoods(),
     enabled: Boolean(userId),
     staleTime: 1000,
   });

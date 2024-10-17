@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios"
 import {
-  IAvailableGoodsResponse,
-  IParamsAddGoods,
+  IAvailableGoodsResponse, IPaginationParams,
+  IParamsAddGoods, ITemplateListResponse,
   ITransaction,
   ITransactionResponse,
   IUserMiningResponse, IUserOverviewResponse, IWebThree, IWebThreeResponse, UserExtracted,
@@ -91,13 +91,21 @@ export class ApiClient {
 
   //templates
 
-  async getTemplateList() {
-    const response = await this.axiosInstance.get<IWebThreeResponse>("image/template/list",);
+  async getTemplateList(params:IPaginationParams):Promise<ITemplateListResponse> {
+    const response = await this.axiosInstance.get<ITemplateListResponse>("image/template/list",{
+      params: params
+    });
     return response.data
   }
 
-  async getTemplate(templateId: string) {
-    const response = await this.axiosInstance.get<IWebThreeResponse>(`image/template/${ templateId }`,);
+  async getTemplate(templateId: string):Promise<string>{
+    const response = await this.axiosInstance.get<string>(`image/template/${ templateId }`,);
+    console.log(response,'getTemplate')
+    return response.data
+  }
+
+  async deleteTemplate(templateId: string){
+    const response = await this.axiosInstance.delete(`image/template_delete/${ templateId }`,);
     return response.data
   }
 
