@@ -4,7 +4,7 @@ import { IParamsAddGoods } from '../types';
 import { type UserMiningExtracted } from '../extractors';
 
 
-export const useAddGoods = () => {
+export const useAddGoodsMutation = () => {
   const apiClient = useApiClient();
   const queryClient = useQueryClient();
 

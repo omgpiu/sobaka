@@ -1,7 +1,7 @@
 import { Table } from 'antd';
-import { TooltipClipBoard } from '../tooltip';
-import { IWebThree } from '../../transport';
-import { Empty } from '../empty';
+import { TooltipClipBoard } from '../../tooltip';
+import { IWebThree } from '../../../transport';
+import { Empty } from '../../empty';
 import React from 'react';
 
 

@@ -1,14 +1,14 @@
 import { Button, message, Table } from 'antd';
-import { TooltipClipBoard } from '../tooltip';
-import { ITransaction, useRefundStarMutation } from '../../transport';
+import { TooltipClipBoard } from '../../tooltip';
+import { ITransaction, useRefundStarMutation } from '../../../transport';
 import React, { useMemo } from 'react';
-import { Empty } from '../empty';
+import { Empty } from '../../empty';
 
 interface Props {
   stars:ITransaction[]
 }
 
-export const TransactionsTable:React.FC<Props> = ({stars}) => {
+export const StarsTable:React.FC<Props> = ({stars}) => {
   const {refundStar,isError,isSuccess,isPending} =useRefundStarMutation()
 
   const onCLickHandler = async (recordId:number)=>{

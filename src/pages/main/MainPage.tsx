@@ -1,14 +1,14 @@
 import { Layout } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
-import { GoodsTable, Header, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
-import { useGetUserInfoQuery } from '../../transport';
+import { GoodsTable, SearchPanel, ListWithModal, StarsTable, UserInfo, WebThreeTable } from '../../components';
+import { useUserInfoQuery } from '../../transport';
 
 const { Content } = Layout;
 
-export const Main = () => {
+export const MainPage = () => {
 
-  const { isLoading, getUserData, userData, goods, stars ,web3} = useGetUserInfoQuery()
+  const { isLoading, getUserData, userData, goods, stars ,web3} = useUserInfoQuery()
 
   const requestHandler = (id: string) => {
     getUserData(id)
@@ -16,7 +16,7 @@ export const Main = () => {
 
   return (
     <>
-      <Header onButtonClick={ requestHandler } loading={ isLoading }/>
+      <SearchPanel onButtonClick={ requestHandler } loading={ isLoading }/>
       <Layout className={ styles.container }>
         <Content>
           <UserInfo user={ userData?.user! ?? {} }/>
@@ -24,7 +24,7 @@ export const Main = () => {
         <Content>
           <div className={ styles.tableGrid }>
             <div className={ styles.tableBlock }>
-              <TransactionsTable stars={ stars ?? [] }/>
+              <StarsTable stars={ stars ?? [] }/>
             </div>
             <div className={ styles.tableBlock }>
               <WebThreeTable dataSource={web3 ?? []}/>

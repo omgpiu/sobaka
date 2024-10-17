@@ -1,0 +1,1 @@
+export { StarsTable } from './StarsTable.tsx'
