@@ -79,7 +79,7 @@ export const WebThreeTable: React.FC<Props> = ({ dataSource }) => {
            pagination={ {
              total: [].length,
              showTotal: (total, range) => `${ range[0] }-${ range[1] } из ${ total } элементов`,
-             pageSize: 5
+             pageSize: 50
            } }
     />
   </div>
