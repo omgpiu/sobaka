@@ -1,14 +1,17 @@
 import { Button, message, Table } from 'antd';
-import { TooltipClipBoard } from '../../tooltip';
 import {
   ITemplate,
   useTemplateListQuery,
 } from '../../../transport';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { Empty } from '../../empty';
 
+interface IProps {
+  onIdClick: (templateId: string) => void;
+  isSingleTemplateLoading: boolean
+}
 
-export const TemplatesTable = () => {
+export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading }) => {
   // const { deleteTemplate, isError, isSuccess, isPending } = useDeleteTemplateMutation()
   const { data, offset, limit, updatePagination } = useTemplateListQuery()
 
@@ -25,13 +28,32 @@ export const TemplatesTable = () => {
 
   }
 
+  const handleClicked = (templateId: string) => () => {
+    onIdClick(templateId)
+  }
+
+
   const columns = useMemo(() => [
     {
-      title: 'Template Id',
+      title: <div>
+        <div>Template Id</div>
+        <div>Click to get template</div>
+      </div>,
       dataIndex: 'templateId',
       key: 'templateId',
-      render: (id: ITemplate['templateId']) => <TooltipClipBoard title={ id } withCustomWidth/>,
       sorter: (a: ITemplate, b: ITemplate) => Number(a.templateId) - Number(b.templateId),
+      width: 150,
+      onCell: (record: ITemplate) => {
+        return  isSingleTemplateLoading
+          ? {
+            style: { cursor: 'not-allowed', opacity: 0.5 },
+          }
+          : {
+            onClick: handleClicked(record.templateId),
+            style: { cursor: 'pointer' },
+          };
+      },
+
     },
     {
       title: 'Subscribers',
@@ -55,7 +77,7 @@ export const TemplatesTable = () => {
           onClick={ async () => {
             await onCLickHandler(record.templateId)
           } }
-          // loading={ isPending }
+          loading={ isSingleTemplateLoading }
         >
           Delete
         </Button>
