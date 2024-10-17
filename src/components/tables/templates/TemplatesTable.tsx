@@ -40,7 +40,7 @@ export const TemplatesTable = () => {
       sorter: (a: ITemplate, b: ITemplate) => Number(a.subscribers) - Number(b.subscribers),
     },
     {
-      title: 'Template',
+      title: 'Template Img',
       dataIndex: 'url',
       key: 'url',
       render: (url: ITemplate['url']) => <img src={ url } alt="template_url" style={ { width: 50, height: 50 } }/>
