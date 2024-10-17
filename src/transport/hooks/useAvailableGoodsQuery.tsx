@@ -3,7 +3,7 @@ import { useApiClient } from '../../context';
 import { useEffect, useState } from 'react';
 
 
-export const useGetAvailableGoods = () => {
+export const useAvailableGoodsQuery = () => {
   const apiClient = useApiClient()
 
   const [userId, setUserId] = useState<string | null>(null);

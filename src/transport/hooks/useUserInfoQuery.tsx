@@ -5,7 +5,7 @@ import { message } from 'antd';
 import { IGoodsExtended, IUser } from '../types.ts';
 
 
-export const useGetUserInfoQuery = () => {
+export const useUserInfoQuery = () => {
   const apiClient = useApiClient()
 
   const [ userId, setUserId ] = useState<string | null>(null);

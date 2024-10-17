@@ -2,13 +2,13 @@ import { Layout } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
 import { GoodsTable, SearchPanel, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
-import { useGetUserInfoQuery } from '../../transport';
+import { useUserInfoQuery } from '../../transport';
 
 const { Content } = Layout;
 
 export const MainPage = () => {
 
-  const { isLoading, getUserData, userData, goods, stars ,web3} = useGetUserInfoQuery()
+  const { isLoading, getUserData, userData, goods, stars ,web3} = useUserInfoQuery()
 
   const requestHandler = (id: string) => {
     getUserData(id)
