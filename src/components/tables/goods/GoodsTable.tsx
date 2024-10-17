@@ -1,7 +1,7 @@
 import { Button, Input, message, Modal, Select, Table } from 'antd';
 import React, { useState } from 'react';
-import { IGood, IGoodsExtended, IParamsAddGoods, useAddGoodsMutation } from '../../transport';
-import { Empty } from '../empty';
+import { IGood, IGoodsExtended, IParamsAddGoods, useAddGoodsMutation } from '../../../transport';
+import { Empty } from '../../empty';
 
 
 

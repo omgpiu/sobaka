@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
-import { GoodsTable, SearchPanel, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
+import { GoodsTable, SearchPanel, ListWithModal, StarsTable, UserInfo, WebThreeTable } from '../../components';
 import { useUserInfoQuery } from '../../transport';
 
 const { Content } = Layout;
@@ -24,7 +24,7 @@ export const MainPage = () => {
         <Content>
           <div className={ styles.tableGrid }>
             <div className={ styles.tableBlock }>
-              <TransactionsTable stars={ stars ?? [] }/>
+              <StarsTable stars={ stars ?? [] }/>
             </div>
             <div className={ styles.tableBlock }>
               <WebThreeTable dataSource={web3 ?? []}/>

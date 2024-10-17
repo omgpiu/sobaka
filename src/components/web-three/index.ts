@@ -1,1 +1,0 @@
-export { WebThreeTable } from './WebThreeTable'
