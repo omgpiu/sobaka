@@ -25,7 +25,6 @@ export const SearchPanel:React.FC<Props> = ({loading,onButtonClick}) => {
   };
 
   const setTokenLocal =()=>{
-    localStorage.setItem('token', userToken)
     setLocalToken(userToken)
   }
 

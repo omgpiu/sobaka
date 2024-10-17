@@ -13,8 +13,8 @@ export const useUserInfoQuery = () => {
     queryKey: [ 'user' ],
     queryFn: async () => {
       const [ userMiningData, userData ] = await Promise.all([
-        apiClient?.getUserMining(userId!),
-        apiClient?.getUser(userId!)
+        apiClient.getUserMining(userId!),
+        apiClient.getUser(userId!)
       ]);
 
       return {
@@ -40,7 +40,7 @@ export const useUserInfoQuery = () => {
     refetch: refetchGoods
   } = useQuery({
     queryKey: [ 'availableGoods' ],
-    queryFn: () => apiClient?.getAvailableGoods(),
+    queryFn: () => apiClient.getAvailableGoods(),
     enabled: Boolean(userId),
     staleTime: 60000,
   });
@@ -53,7 +53,7 @@ export const useUserInfoQuery = () => {
     refetch: refetchStar
   } = useQuery({
     queryKey: [ 'stars' ],
-    queryFn: () => apiClient?.getStars(userId!),
+    queryFn: () => apiClient.getStars(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });
@@ -67,7 +67,7 @@ export const useUserInfoQuery = () => {
     refetch: refetchWeb3
   } = useQuery({
     queryKey: [ 'web3' ],
-    queryFn: () => apiClient?.getWebThreeTransactions(userId!),
+    queryFn: () => apiClient.getWebThreeTransactions(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });

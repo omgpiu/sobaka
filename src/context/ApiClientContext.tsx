@@ -1,55 +1,45 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { ApiClient } from '../transport';
-import { message } from 'antd';
-
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ApiClientContextProps {
-  client: ApiClient | null;
+  client: ApiClient ;
   userToken: string;
   setUserToken: (token: string) => void;
 }
 
-const ApiClientContext = createContext<ApiClientContextProps | null>(null);
+const token = localStorage.getItem('token') || '';
 
-const token = localStorage.getItem('token') || ''
-const apiClient = new ApiClient(token)
+const apiClient = new ApiClient(token);
+
+const defaultContextValue: ApiClientContextProps = {
+  client: apiClient,
+  userToken: token,
+  setUserToken: () => {},
+};
+
+const ApiClientContext = createContext<ApiClientContextProps>(defaultContextValue);
 
 export const ApiClientProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [ loading, setLoading ] = useState(true);
-  const [ userToken, setUserToken ] = useState('');
+  const [userToken, setUserToken] = useState(token);
 
-  const [ client, setClient ] = useState<ApiClient>(apiClient);
+  const [client, setClient] = useState<ApiClient>(apiClient);
 
   useEffect(() => {
-    const initializeClient = async () => {
-      try {
-
-        if (Boolean(userToken) && userToken !== token) {
-          const updatedClient = new ApiClient(userToken);
-          setClient(updatedClient);
-        }
-
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeClient();
-  }, [ userToken ]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (userToken && userToken !== token) {
+      const updatedClient = new ApiClient(userToken);
+      setClient(updatedClient);
+      localStorage.setItem('token', userToken);
+    }
+  }, [userToken]);
 
   return (
-    <ApiClientContext.Provider value={ { client, userToken, setUserToken } }>
-      { children }
+    <ApiClientContext.Provider value={{ client, userToken, setUserToken }}>
+      {children}
     </ApiClientContext.Provider>
   );
 };
 
-export const useApiClient = (): ApiClient | null => {
+export const useApiClient = (): ApiClient => {
   const context = useContext(ApiClientContext);
   if (!context) {
     throw new Error('useApiClient must be used within an ApiClientProvider');
@@ -57,10 +47,10 @@ export const useApiClient = (): ApiClient | null => {
   return context.client;
 };
 
-export const useUserToken = (): [ string, (token: string) => void ] => {
+export const useUserToken = (): [string, (token: string) => void] => {
   const context = useContext(ApiClientContext);
   if (!context) {
     throw new Error('useUserToken must be used within an ApiClientProvider');
   }
-  return [ context.userToken, context.setUserToken ];
+  return [context.userToken, context.setUserToken];
 };
