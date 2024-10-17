@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios"
 import {
   IAvailableGoodsResponse, IPaginationParams,
-  IParamsAddGoods, ITemplateListResponse,
+  IParamsAddGoods, ISingleTemplateResponse, ITemplateListResponse,
   ITransaction,
   ITransactionResponse,
   IUserMiningResponse, IUserOverviewResponse, IWebThree, IWebThreeResponse, UserExtracted,
@@ -98,9 +98,8 @@ export class ApiClient {
     return response.data
   }
 
-  async getTemplate(templateId: string):Promise<string>{
-    const response = await this.axiosInstance.get<string>(`image/template/${ templateId }`,);
-    console.log(response,'getTemplate')
+  async getTemplate(templateId: string):Promise<ISingleTemplateResponse>{
+    const response = await this.axiosInstance.get<ISingleTemplateResponse>(`image/template/${ templateId }`,);
     return response.data
   }
 

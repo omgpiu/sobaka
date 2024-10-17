@@ -168,4 +168,14 @@ export interface ITemplate {
   subscribers: number
 }
 
+export type ISingleTemplate = Pick<ITemplate, 'url' | 'subscribers'> & {
+  id: number,
+  x: number,
+  y: number,
+  imageSize: 32,
+  hits: number,
+  createdAt: number
+}
+
+export type ISingleTemplateResponse = ISingleTemplate
 export type ITemplateListResponse = ITemplate[]

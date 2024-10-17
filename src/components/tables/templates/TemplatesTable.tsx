@@ -3,7 +3,6 @@ import { TooltipClipBoard } from '../../tooltip';
 import {
   ITemplate,
   useTemplateListQuery,
-  useTemplateQuery,
 } from '../../../transport';
 import { useMemo } from 'react';
 import { Empty } from '../../empty';
@@ -12,10 +11,7 @@ import { Empty } from '../../empty';
 export const TemplatesTable = () => {
   // const { deleteTemplate, isError, isSuccess, isPending } = useDeleteTemplateMutation()
   const { data, offset, limit, updatePagination } = useTemplateListQuery()
-  const { getSingleTemplate, data: template } = useTemplateQuery()
 
-  console.log('template', template)
-  console.log(getSingleTemplate, 'data')
 
   const onCLickHandler = async (templateId: string) => {
     // await deleteTemplate(templateId)
