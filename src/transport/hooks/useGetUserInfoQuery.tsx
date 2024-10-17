@@ -8,11 +8,11 @@ import { IGoodsExtended, IUser } from '../types.ts';
 export const useGetUserInfoQuery = () => {
   const apiClient = useApiClient()
 
-  const [userId, setUserId] = useState<string | null>(null);
-  const {data: userData, isError, isLoading, isSuccess, refetch: refetchUser, error: userError} = useQuery({
-    queryKey: ['user'],
+  const [ userId, setUserId ] = useState<string | null>(null);
+  const { data: userData, isError, isLoading, isSuccess, refetch: refetchUser, error: userError } = useQuery({
+    queryKey: [ 'user' ],
     queryFn: async () => {
-      const [userMiningData, userData] = await Promise.all([
+      const [ userMiningData, userData ] = await Promise.all([
         apiClient?.getUserMining(userId!),
         apiClient?.getUser(userId!)
       ]);
@@ -23,7 +23,7 @@ export const useGetUserInfoQuery = () => {
         user: {
           ...userData,
           ...userMiningData!.user
-        }  as IUser
+        } as IUser
 
 
       }
@@ -39,7 +39,7 @@ export const useGetUserInfoQuery = () => {
     error: goodsError,
     refetch: refetchGoods
   } = useQuery({
-    queryKey: ['availableGoods'],
+    queryKey: [ 'availableGoods' ],
     queryFn: () => apiClient?.getAvailableGoods(),
     enabled: Boolean(userId),
     staleTime: 60000,
@@ -52,12 +52,11 @@ export const useGetUserInfoQuery = () => {
     error: starsError,
     refetch: refetchStar
   } = useQuery({
-    queryKey: ['stars'],
+    queryKey: [ 'stars' ],
     queryFn: () => apiClient?.getStars(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
   });
-
 
 
   const {
@@ -67,7 +66,7 @@ export const useGetUserInfoQuery = () => {
     error: web3Error,
     refetch: refetchWeb3
   } = useQuery({
-    queryKey: ['web3'],
+    queryKey: [ 'web3' ],
     queryFn: () => apiClient?.getWebThreeTransactions(userId!),
     enabled: Boolean(userId),
     staleTime: 1000,
@@ -90,18 +89,18 @@ export const useGetUserInfoQuery = () => {
           }
         };
       });
-  }, [goodsData, userData?.user.Goods]);
+  }, [ goodsData, userData?.user.Goods ]);
 
 
   const handleRetry = () => {
 
     //@ts-ignore
-    if (userError?.response?.status === 500) {
+    if (userError?.response?.status === 500 || userError?.response?.status === 401) {
       refetchUser();
     }
 
     //@ts-ignore
-    if (goodsError?.response?.status === 500) {
+    if (goodsError?.response?.status === 500 || goodsError?.response?.status === 401) {
       refetchGoods();
     }
 
@@ -128,7 +127,7 @@ export const useGetUserInfoQuery = () => {
     if (userId) {
       refetchUser()
     }
-  }, [userId]);
+  }, [ userId ]);
 
   useEffect(() => {
     if (isError) {
@@ -141,7 +140,7 @@ export const useGetUserInfoQuery = () => {
       message.error('Ошибка с получением старс транзакций')
     }
 
-  }, [isError, isErrorGoods, isStarsError]);
+  }, [ isError, isErrorGoods, isStarsError ]);
 
   return {
     isSuccess,

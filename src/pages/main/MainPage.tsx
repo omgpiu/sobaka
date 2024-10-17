@@ -1,12 +1,12 @@
 import { Layout } from 'antd';
 import styles from './style.module.css';
 import clsx from 'clsx';
-import { GoodsTable, Header, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
+import { GoodsTable, SearchPanel, ListWithModal, TransactionsTable, UserInfo, WebThreeTable } from '../../components';
 import { useGetUserInfoQuery } from '../../transport';
 
 const { Content } = Layout;
 
-export const Main = () => {
+export const MainPage = () => {
 
   const { isLoading, getUserData, userData, goods, stars ,web3} = useGetUserInfoQuery()
 
@@ -16,7 +16,7 @@ export const Main = () => {
 
   return (
     <>
-      <Header onButtonClick={ requestHandler } loading={ isLoading }/>
+      <SearchPanel onButtonClick={ requestHandler } loading={ isLoading }/>
       <Layout className={ styles.container }>
         <Content>
           <UserInfo user={ userData?.user! ?? {} }/>

@@ -1,4 +1,4 @@
-import styles from './Header.module.css';
+import styles from './SearchPanel.module.css';
 import React, { useState } from 'react';
 import { Button, Input, Layout } from 'antd';
 import { useUserToken } from '../../context';
@@ -8,7 +8,7 @@ interface Props {
   onButtonClick:(usedId:string)=>void
 
 }
-export const Header:React.FC<Props> = ({loading,onButtonClick}) => {
+export const SearchPanel:React.FC<Props> = ({loading,onButtonClick}) => {
   const [userId,setUserId] = useState('')
   const [userToken,setUserToken] = useState('')
   const [_,setLocalToken] = useUserToken()
