@@ -9,7 +9,7 @@ export const TemplateInfo = () => {
   const [ templateId, setTemplateId ] = useState('')
 
   const handleDelete = async () => {
-    message.warning('Template has been deleted');
+    message.warning('Тут будем удалять темплейт');
   };
 
   const handleGetTemplate = (e: any) => {
