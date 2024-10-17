@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { useEffect, useState } from 'react';
+import { ISingleTemplate } from '../types.ts';
 
 
 export const useTemplateQuery = () => {
@@ -8,18 +9,17 @@ export const useTemplateQuery = () => {
 
   const [templateId, setTemplateId] = useState< null | string >(null);
 
-  const {data, isError, isLoading, isSuccess} = useQuery({
+  const {data, isError, isLoading, isSuccess,refetch} = useQuery({
     queryKey: ['templateSingle'],
     queryFn: () => apiClient.getTemplate(templateId!),
     enabled: Boolean(templateId),
-    staleTime: 1000,
   });
 
   useEffect(() => {
     if (isSuccess) {
-      setTemplateId(null)
+      refetch()
     }
-  }, [isSuccess])
+  }, [templateId])
 
   const handleClick = (templateId: string) => {
     setTemplateId(templateId);
@@ -29,7 +29,7 @@ export const useTemplateQuery = () => {
     isSuccess,
     isError,
     isLoading,
-    data,
+    data: data ?? {} as ISingleTemplate,
     getSingleTemplate: handleClick
   }
 }
