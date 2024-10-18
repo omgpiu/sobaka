@@ -9,6 +9,7 @@ interface IProps {
   confirmationText?: string;
   modalTitle?: string;
   disabled?:boolean;
+  children?: React.ReactNode;
 
 }
 
@@ -19,7 +20,8 @@ export const ConfirmationModal: React.FC<IProps> = ({
   isLoading,
   mainButtonTitle,
   modalTitle,
-  disabled
+  disabled,
+  children
 }) => {
   const { isModalVisible, showModal, hideModal } = useModal();
 
@@ -47,7 +49,8 @@ export const ConfirmationModal: React.FC<IProps> = ({
           </Button>,
         ] }
       >
-        <p>{ confirmationText ?? "Вы точно хотите удалить данный Темплейт?" }</p>
+        <p style={{paddingBottom:'10px'}}>{ confirmationText ?? "Вы точно хотите удалить данный Темплейт?" }</p>
+        {children}
       </Modal>
     </div>
   );
