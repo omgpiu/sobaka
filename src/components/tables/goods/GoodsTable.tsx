@@ -1,7 +1,7 @@
 import { Button, Input, message, Modal, Select, Table } from 'antd';
 import React, { useState } from 'react';
-import { IGood, IGoodsExtended, IParamsAddGoods, useAddGoods } from '../../transport';
-import { Empty } from '../empty';
+import { IGood, IGoodsExtended, IParamsAddGoods, useAddGoodsMutation } from '../../../transport';
+import { Empty } from '../../empty';
 
 
 
@@ -88,7 +88,7 @@ export const GoodsTable: React.FC<Props> = ({availableGoodsArray = [], userGoods
   const [selectedItem, setSelectedItem] = useState<{ id: IGood['id'], name: IGood['name'] } | null>(null);
   const [quantity, setQuantity] = useState<number>(0);
 
-  const { addGoods} = useAddGoods()
+  const { addGoods} = useAddGoodsMutation()
 
   const openModal = () => {
     setIsModalVisible(true);

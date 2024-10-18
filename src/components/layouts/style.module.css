@@ -1,0 +1,36 @@
+.header {
+    padding: 20px;
+    animation: changeColor 10s infinite;
+    transition: background-color 1s ease;
+}
+
+@keyframes changeColor {
+    0% {
+        background-color: #001529;
+    }
+    25% {
+        background-color: #002A40;
+    }
+    50% {
+        background-color: #004D73;
+    }
+    75% {
+        background-color: #006494;
+    }
+    100% {
+        background-color: #0086C3;
+    }
+}
+
+.navList {
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+
+}
+
+
+.navList a, a:link, a:visited {
+    text-decoration: none;
+    color: white;
+}

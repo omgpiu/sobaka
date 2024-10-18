@@ -1,41 +1,36 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { ApiClient } from '../transport';
-
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ApiClientContextProps {
-  client: ApiClient | null;
+  client: ApiClient ;
   userToken: string;
   setUserToken: (token: string) => void;
 }
 
-const ApiClientContext = createContext<ApiClientContextProps | null>(null);
+const token = localStorage.getItem('token') || '';
+
+const apiClient = new ApiClient(token);
+
+const defaultContextValue: ApiClientContextProps = {
+  client: apiClient,
+  userToken: token,
+  setUserToken: () => {},
+};
+
+const ApiClientContext = createContext<ApiClientContextProps>(defaultContextValue);
 
 export const ApiClientProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [client, setClient] = useState<ApiClient | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [userToken, setUserToken] = useState('');
+  const [userToken, setUserToken] = useState(token);
+
+  const [client, setClient] = useState<ApiClient>(apiClient);
 
   useEffect(() => {
-    const initializeClient = async () => {
-      try {
-        const token = userToken || localStorage.getItem('token')
-
-        if(token){
-          const apiClient = new ApiClient(token);
-          setClient(apiClient);
-        }
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeClient();
+    if (userToken && userToken !== token) {
+      const updatedClient = new ApiClient(userToken);
+      setClient(updatedClient);
+      localStorage.setItem('token', userToken);
+    }
   }, [userToken]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <ApiClientContext.Provider value={{ client, userToken, setUserToken }}>
@@ -44,7 +39,7 @@ export const ApiClientProvider: React.FC<{ children: ReactNode }> = ({ children 
   );
 };
 
-export const useApiClient = (): ApiClient|null => {
+export const useApiClient = (): ApiClient => {
   const context = useContext(ApiClientContext);
   if (!context) {
     throw new Error('useApiClient must be used within an ApiClientProvider');

@@ -1,1 +1,0 @@
-export { ListWithModal } from './List'

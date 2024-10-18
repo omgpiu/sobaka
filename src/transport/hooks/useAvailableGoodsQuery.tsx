@@ -3,14 +3,14 @@ import { useApiClient } from '../../context';
 import { useEffect, useState } from 'react';
 
 
-export const useGetAvailableGoods = () => {
+export const useAvailableGoodsQuery = () => {
   const apiClient = useApiClient()
 
   const [userId, setUserId] = useState<string | null>(null);
 
   const {data, isError, isLoading, isSuccess} = useQuery({
     queryKey: ['availableGoods'],
-    queryFn: () => apiClient!.getAvailableGoods(),
+    queryFn: () => apiClient.getAvailableGoods(),
     enabled: Boolean(userId),
     staleTime: 1000,
   });

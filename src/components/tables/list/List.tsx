@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Table, Input } from 'antd';
 import styles from './styles.module.css';
-import { Empty } from '../empty';
+import { Empty } from '../../empty';
 
 interface Props {
   header: string;
