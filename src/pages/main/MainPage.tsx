@@ -15,9 +15,8 @@ export const MainPage = () => {
   }
 
   return (
-    <>
+    <Layout className={ styles.container }>
       <SearchPanel onButtonClick={ requestHandler } loading={ isLoading }/>
-      <Layout className={ styles.container }>
         <Content>
           <UserInfo user={ userData?.user! ?? {} }/>
         </Content>
@@ -39,8 +38,8 @@ export const MainPage = () => {
             </div>
           </div>
         </Content>
-      </Layout>
-    </>
+
+    </Layout>
   );
 };
 
