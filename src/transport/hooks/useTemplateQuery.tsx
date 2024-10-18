@@ -21,8 +21,6 @@ export const useTemplateQuery = () => {
     enabled: Boolean(templateId),
   });
 
-  console.log(userData,'userData')
-
   useEffect(() => {
     if (isSuccess) {
       refetch()
