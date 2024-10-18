@@ -1,7 +1,8 @@
-import { Card, Button, message, Collapse } from 'antd';
+import { Card, Collapse } from 'antd';
 import styles from './styles.module.css';
-import { ISingleTemplate } from '../../transport';
+import { ISingleTemplate, useDeleteTemplateMutation } from '../../transport';
 import { FC } from 'react';
+import { ConfirmationModal } from '../confirmation-modal';
 
 interface IProps {
   template: ISingleTemplate
@@ -10,11 +11,11 @@ interface IProps {
 
 
 export const TemplateInfo:FC<IProps> = ({template,isLoading}) => {
+  const { deleteTemplate } = useDeleteTemplateMutation()
 
   const handleDelete = async () => {
-    message.warning('Тут будем удалять темплейт');
+    await deleteTemplate(template.id)
   };
-
 
 
   const content = (
@@ -32,13 +33,7 @@ export const TemplateInfo:FC<IProps> = ({template,isLoading}) => {
           <p>Template X: { template.x }</p>
         </div>
       </div>
-      <Button
-        className={ styles.buttonDelete }
-        onClick={ handleDelete }
-        loading={isLoading}
-      >
-        Delete
-      </Button>
+      <ConfirmationModal onClick={handleDelete} isLoading={isLoading} disabled={!template.id}/>
     </Card>)
 
   const label = <div className={ styles.collapsedHeader }>
