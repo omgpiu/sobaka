@@ -11,7 +11,7 @@ export const useUserBanMutation = () => {
       mutationFn: (userId: number) => apiClient.banUser(userId)!,
       onSuccess: () => {
         message.success('Чухонец забанен!')
-        return queryClient.removeQueries()
+        queryClient.invalidateQueries({ queryKey: ['userSingle'] })
       },
       onError:()=>{
         message.error('Не получилось забанить засранца')
