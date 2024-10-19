@@ -11,12 +11,14 @@ import styles from './styles.module.css'
 interface IProps {
   onIdClick: (templateId: string) => void;
   isSingleTemplateLoading: boolean
+  offset: number
+  limit: number
+  updatePagination:(currentPage: number,pageSize:number) => void
 }
 
-export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading }) => {
-  const { deleteTemplate } = useDeleteTemplateMutation()
-  const { data, offset, limit, updatePagination } = useTemplateListQuery()
-
+export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading,offset,limit,updatePagination }) => {
+  const { data} = useTemplateListQuery(limit,offset)
+  const { deleteTemplate } = useDeleteTemplateMutation(limit,offset)
 
   const onCLickHandler = async (templateId: string) => {
     await deleteTemplate(templateId)
