@@ -1,23 +1,23 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useApiClient } from '../../context';
-import { ITemplate } from '../types.ts';
 import { message } from 'antd';
 
-export const useDeleteTemplateMutation = () => {
+
+export const useDeleteTemplateMutation = (limit: number, offset: number) => {
   const apiClient = useApiClient();
   const queryClient = useQueryClient();
 
   const { mutateAsync, isError, isSuccess, data, isPending } = useMutation({
     mutationFn: (templateId: number | string) => apiClient.deleteTemplate(Number(templateId)),
-    onSuccess: ({ templateId }: { templateId: number }) => {
-      queryClient.setQueryData([ 'templateList' ], (oldData: ITemplate[] | undefined) => {
-        if (!oldData) return oldData;
-        return oldData.filter((oldData: ITemplate) => Number(Number(oldData.templateId) !== Number(templateId)))
-      });
-      message.success('Теймплейт удален: ' + templateId);
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: [ 'templateList', limit, offset ] })
+      await queryClient.setQueryData(  [ 'templateSingle' ] ,{})
+      await queryClient.setQueryData( ['userSingle'],{})
+
+      message.success('Темплейт удален: ' + variables);
     },
-    onError: (_, variables) => {
-      message.error('Теймплейт не был удален: ' + variables);
+    onError: async (_, variables) => {
+     await message.error('Не получилось удалить темплейт: ' + variables);
     }
   });
 
