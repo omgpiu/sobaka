@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet,  NavLink } from 'react-router-dom';
 import styles from './style.module.css'
 
 export const BaseLayout = () => {
@@ -7,8 +7,8 @@ export const BaseLayout = () => {
       <header className={ styles.header }>
         <nav>
           <ul className={ styles.navList }>
-            <li><Link to="/">Main</Link></li>
-            <li><Link to="/templates">Templates</Link></li>
+            <li><NavLink to="/" className={({ isActive }) => (isActive ? styles.active : '')}>Main</NavLink></li>
+            <li><NavLink to="/templates" className={({ isActive }) => (isActive ? styles.active : '')}>Templates</NavLink></li>
           </ul>
         </nav>
       </header>

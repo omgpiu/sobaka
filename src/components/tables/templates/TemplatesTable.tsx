@@ -1,31 +1,27 @@
-import { Button, message, Table } from 'antd';
+import {  Table } from 'antd';
 import {
-  ITemplate,
+  ITemplate, useDeleteTemplateMutation,
   useTemplateListQuery,
 } from '../../../transport';
 import { FC, useMemo } from 'react';
 import { Empty } from '../../empty';
+import { ConfirmationModal } from '../../confirmation-modal';
+import styles from './styles.module.css'
 
 interface IProps {
   onIdClick: (templateId: string) => void;
   isSingleTemplateLoading: boolean
+  offset: number
+  limit: number
+  updatePagination:(currentPage: number,pageSize:number) => void
 }
 
-export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading }) => {
-  // const { deleteTemplate, isError, isSuccess, isPending } = useDeleteTemplateMutation()
-  const { data, offset, limit, updatePagination } = useTemplateListQuery()
-
+export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading,offset,limit,updatePagination }) => {
+  const { data} = useTemplateListQuery(limit,offset)
+  const { deleteTemplate } = useDeleteTemplateMutation(limit,offset)
 
   const onCLickHandler = async (templateId: string) => {
-    // await deleteTemplate(templateId)
-    // if (isSuccess) {
-    //   message.success('Refund transaction success: ' + templateId);
-    // }
-    // if (isError) {
-    //   message.error('Refund transaction failed: ' + templateId);
-    // }
-    message.success('Будет удалять ' + templateId);
-
+    await deleteTemplate(templateId)
   }
 
   const handleClicked = (templateId: string) => () => {
@@ -65,22 +61,14 @@ export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading 
       title: 'Template Img',
       dataIndex: 'url',
       key: 'url',
-      render: (url: ITemplate['url']) => <img src={ url } alt="template_url" style={ { width: 50, height: 50 } }/>
+      render: (url: ITemplate['url']) => <img src={ url } alt="template_url" className={styles.img}/>
     },
     {
       title: 'Action',
       key: 'action',
       width: 150,
       align: 'center' as const,
-      render: (record: ITemplate) =>
-        <Button
-          onClick={ async () => {
-            await onCLickHandler(record.templateId)
-          } }
-          loading={ isSingleTemplateLoading }
-        >
-          Delete
-        </Button>
+      render: (record: ITemplate) =><ConfirmationModal onClick={()=>onCLickHandler(record.templateId)} isLoading={isSingleTemplateLoading}/>
     },
   ], [])
 

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
 import { useEffect, useState } from 'react';
-import { ISingleTemplate } from '../types.ts';
+import { ISingleTemplate, UserExtracted } from '../types.ts';
 
 
 export const useTemplateQuery = () => {
@@ -15,9 +15,16 @@ export const useTemplateQuery = () => {
     enabled: Boolean(templateId),
   });
 
+  const {data:userData, isError:isUserError, isLoading:isUserLoading,refetch:refetchUser} = useQuery({
+    queryKey: ['userSingle'],
+    queryFn: () => apiClient.getUser(templateId!),
+    enabled: Boolean(templateId),
+  });
+
   useEffect(() => {
     if (isSuccess) {
       refetch()
+      refetchUser()
     }
   }, [templateId])
 
@@ -27,9 +34,10 @@ export const useTemplateQuery = () => {
 
   return {
     isSuccess,
-    isError,
-    isLoading,
-    data: data ?? {} as ISingleTemplate,
+    isError:isError||isUserError,
+    isLoading:isUserLoading || isLoading,
+    template:data ?? {} as ISingleTemplate,
+    user:userData ?? {} as UserExtracted,
     getSingleTemplate: handleClick
   }
 }

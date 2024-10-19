@@ -1,5 +1,4 @@
 .header {
-    padding: 20px;
     animation: changeColor 10s infinite;
     transition: background-color 1s ease;
 }
@@ -25,12 +24,21 @@
 .navList {
     display: flex;
     flex-direction: row;
-    gap:10px;
-
 }
 
+.navList a {
+    box-sizing: border-box;
+    display: block;
+    padding: 20px;
+}
 
 .navList a, a:link, a:visited {
     text-decoration: none;
     color: white;
+}
+
+.active {
+    background-color: cadetblue;
+    font-weight: bolder;
+    text-decoration: underline !important;
 }

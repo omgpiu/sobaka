@@ -103,8 +103,8 @@ export class ApiClient {
     return response.data
   }
 
-  async deleteTemplate(templateId: string){
-    const response = await this.axiosInstance.delete(`image/template_delete/${ templateId }`,);
+  async deleteTemplate(templateId: number){
+    const response = await this.axiosInstance.delete(`admin/delete/template/${ templateId }`,);
     return response.data
   }
 

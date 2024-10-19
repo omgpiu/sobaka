@@ -1,5 +1,6 @@
 import { useMutation,  useQueryClient } from "@tanstack/react-query"
 import { useApiClient } from '../../context';
+import { message } from 'antd';
 
 
 export const useUserBanMutation = () => {
@@ -8,7 +9,13 @@ export const useUserBanMutation = () => {
 
   const {mutateAsync, isError, isSuccess, data} = useMutation({
       mutationFn: (userId: number) => apiClient.banUser(userId)!,
-      onSuccess: () => queryClient.removeQueries()
+      onSuccess: () => {
+        message.success('Чухонец забанен!')
+        return queryClient.removeQueries()
+      },
+      onError:()=>{
+        message.error('Не получилось забанить засранца')
+      }
     },
   );
 
