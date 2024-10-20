@@ -1,7 +1,6 @@
 import styles from './SearchPanel.module.css';
 import React, { useState } from 'react';
 import { Button, Input, Layout } from 'antd';
-import { useUserToken } from '../../context';
 
 interface Props {
   loading: boolean
@@ -10,22 +9,11 @@ interface Props {
 }
 export const SearchPanel:React.FC<Props> = ({loading,onButtonClick}) => {
   const [userId,setUserId] = useState('')
-  const [userToken,setUserToken] = useState('')
-  const [_,setLocalToken] = useUserToken()
   const handleInputChange = (e:any) => {
     setUserId(e.target.value);
   };
-
   const onClickHandler =()=>{
     onButtonClick(userId)
-  }
-
-  const handleInputChangeToken = (e:any) => {
-    setUserToken(e.target.value);
-  };
-
-  const setTokenLocal =()=>{
-    setLocalToken(userToken)
   }
 
 
@@ -47,21 +35,6 @@ export const SearchPanel:React.FC<Props> = ({loading,onButtonClick}) => {
       >
         Get user info
       </Button>
-        <Input
-          className={styles.input}
-          placeholder="Token"
-          value={userToken}
-          onChange={handleInputChangeToken}
-          disabled={loading}
-        />
-        <Button
-          type="primary"
-          onClick={setTokenLocal}
-          loading={loading}
-        >
-          set token
-        </Button>
-
         {import.meta.env.VITE_HEADER_SECOND}
       </Layout.Header>
     </div>)
