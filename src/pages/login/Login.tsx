@@ -46,7 +46,7 @@ export const LoginForm: React.FC = () => {
           >
             <Input
               prefix={ <UserOutlined/> }
-              placeholder="Token"
+              placeholder="Login"
             />
           </Form.Item>
 
