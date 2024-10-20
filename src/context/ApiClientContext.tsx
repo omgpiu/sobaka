@@ -2,9 +2,11 @@ import { ApiClient } from '../transport';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ApiClientContextProps {
-  client: ApiClient ;
-  userToken: string;
-  setUserToken: (token: string) => void;
+  client: ApiClient;
+  login: (token: string) => void;
+  isAuthent: boolean
+  loading: boolean
+  logout:()=>void;
 }
 
 const token = localStorage.getItem('token') || '';
@@ -13,28 +15,50 @@ const apiClient = new ApiClient(token);
 
 const defaultContextValue: ApiClientContextProps = {
   client: apiClient,
-  userToken: token,
-  setUserToken: () => {},
+  login: () => {
+  },
+  logout: () => {},
+  isAuthent: false,
+  loading: false
 };
 
 const ApiClientContext = createContext<ApiClientContextProps>(defaultContextValue);
 
 export const ApiClientProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [userToken, setUserToken] = useState(token);
+  const [ isAuthent, setIsAuthent ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
 
-  const [client, setClient] = useState<ApiClient>(apiClient);
+  const [ client, setClient ] = useState<ApiClient>(apiClient);
+
+  const login = async (token: string) => {
+    setLoading(true);
+    localStorage.setItem('token', token);
+    const updatedClient = new ApiClient(token);
+    setClient(updatedClient);
+    await updatedClient.getAvailableGoods().then(() => {
+      setIsAuthent(true)
+    }).catch(() => {
+
+    }).finally(() => {
+      setLoading(false)
+    })
+
+  }
+
+  const logout = ()=>{
+    localStorage.removeItem('token');
+    setIsAuthent(false)
+  }
+
 
   useEffect(() => {
-    if (userToken && userToken !== token) {
-      const updatedClient = new ApiClient(userToken);
-      setClient(updatedClient);
-      localStorage.setItem('token', userToken);
-    }
-  }, [userToken]);
+    login(token)
+  }, [ ]);
+
 
   return (
-    <ApiClientContext.Provider value={{ client, userToken, setUserToken }}>
-      {children}
+    <ApiClientContext.Provider value={ { client,  isAuthent, login,logout, loading } }>
+      { children }
     </ApiClientContext.Provider>
   );
 };
@@ -47,10 +71,21 @@ export const useApiClient = (): ApiClient => {
   return context.client;
 };
 
-export const useUserToken = (): [string, (token: string) => void] => {
+export const useAuth = (): {
+  login: (token: string) => void
+  isAuthent: boolean
+  loading: boolean
+  logout:()=>void
+} => {
   const context = useContext(ApiClientContext);
   if (!context) {
     throw new Error('useUserToken must be used within an ApiClientProvider');
   }
-  return [context.userToken, context.setUserToken];
+  const { login, isAuthent, loading,logout } = context
+  return {
+    login,
+    isAuthent,
+    loading,
+    logout
+  }
 };
