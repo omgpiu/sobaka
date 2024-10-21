@@ -45,32 +45,7 @@ export const useUserInfoQuery = () => {
     staleTime: 60000,
   });
 
-  const {
-    data: stars,
-    isError: isStarsError,
-    isLoading: isStarsLoading,
-    error: starsError,
-    refetch: refetchStar
-  } = useQuery({
-    queryKey: [ 'stars' ],
-    queryFn: () => apiClient.getStars(userId!),
-    enabled: Boolean(userId),
-    staleTime: 1000,
-  });
 
-
-  const {
-    data: web3,
-    isError: isWeb3Error,
-    isLoading: isWeb3Loading,
-    error: web3Error,
-    refetch: refetchWeb3
-  } = useQuery({
-    queryKey: [ 'web3' ],
-    queryFn: () => apiClient.getWebThreeTransactions(userId!),
-    enabled: Boolean(userId),
-    staleTime: 1000,
-  });
 
   const userGoods = useMemo<IGoodsExtended[]>(() => {
     if (!userData?.user || !userData?.user.Goods || !goodsData) return [];
@@ -104,20 +79,11 @@ export const useUserInfoQuery = () => {
       refetchGoods();
     }
 
-    //@ts-ignore
-    if (starsError?.response?.status === 500) {
-      refetchStar();
-    }
-
-    //@ts-ignore
-    if (web3Error?.response?.status === 500) {
-      refetchWeb3();
-    }
   };
 
   const handleClick = (id: string) => {
     setUserId(id);
-    if (userError || goodsError || starsError) {
+    if (userError || goodsError) {
       handleRetry()
     }
 
@@ -136,23 +102,19 @@ export const useUserInfoQuery = () => {
     if (isErrorGoods) {
       message.error('Ошибка с получением мапы гудсов')
     }
-    if (isStarsError) {
-      message.error('Ошибка с получением старс транзакций')
-    }
 
-  }, [ isError, isErrorGoods, isStarsError ]);
+
+  }, [ isError, isErrorGoods ]);
 
   return {
     isSuccess,
-    isError: isError || isErrorGoods || isStarsError || isWeb3Error,
-    isLoading: isLoading || isGoodsLoading || isStarsLoading || isWeb3Loading,
+    isError: isError || isErrorGoods,
+    isLoading: isLoading || isGoodsLoading,
     userData: userData,
     goods: {
       goodsArray: goodsData,
       userGoods: userGoods
     },
-    stars,
-    web3,
     getUserData: handleClick,
   }
 }

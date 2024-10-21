@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { TooltipClipBoard } from '../../tooltip';
-import { IWebThree } from '../../../transport';
+import { ITablePagination, IWebThree } from '../../../transport';
 import { Empty } from '../../empty';
 import React from 'react';
 
@@ -41,7 +41,7 @@ const columns = [
     dataIndex: 'dttmStart',
     key: 'dttmStart',
     sorter: (a: IWebThree, b: IWebThree) => a.dttmStart - b.dttmStart,
-    render: (timestamp: number) => new Date(timestamp*1000).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })
+    render: (timestamp: number) => new Date(timestamp * 1000).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })
   },
   {
     title: 'Wallet From',
@@ -65,11 +65,7 @@ const columns = [
 ];
 
 
-interface Props {
-  dataSource: IWebThree[]
-}
-
-export const WebThreeTable: React.FC<Props> = ({ dataSource }) => {
+export const WebThreeTable: React.FC<ITablePagination<IWebThree[]>> = ({ dataSource, limit, offset, updatePagination }) => {
   return <div>
     <h2>Транзакции WEB3</h2>
     <Table dataSource={ dataSource } columns={ columns } rowKey={ 'id' }
@@ -77,9 +73,14 @@ export const WebThreeTable: React.FC<Props> = ({ dataSource }) => {
              emptyText: <Empty/>
            } }
            pagination={ {
-             total: [].length,
-             showTotal: (total, range) => `${ range[0] }-${ range[1] } из ${ total } элементов`,
-             pageSize: 50
+             current: Math.floor(offset / limit) + 1,
+             pageSize: limit,
+             total: 900,
+             showSizeChanger: true,
+             pageSizeOptions: [ '20', '50', '100' ],
+           } }
+           onChange={ (pagination) => {
+             updatePagination(pagination.current ?? 0, pagination.pageSize ?? 0)
            } }
     />
   </div>

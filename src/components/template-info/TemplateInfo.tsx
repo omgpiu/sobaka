@@ -23,7 +23,7 @@ interface IProps {
 export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, limit }) => {
   const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
   const { banUser } = useUserBanMutation()
-  const { banTemplate } = useBanTemplateMutation()
+  const { banTemplate } = useBanTemplateMutation(limit, offset)
   const handleDelete = async () => {
     await deleteTemplate(template.id)
   };
@@ -44,21 +44,23 @@ export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, li
         <div className={ styles.templateInfo }>
           <p><span>TemplateId:</span> { template.id }</p>
           <p><span>Template Hits</span> : { template.hits }</p>
-          <p><span>CreatedAt:</span> { template.createdAt }</p>
+          <p>
+            <span>CreatedAt:</span> { template.createdAt && new Date(template.createdAt * 1000).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }) }
+          </p>
           <p><span>imageSize:</span> { template.imageSize }</p>
           <p><span>Template Y:</span> { template.y }</p>
           <p><span>Template X:</span> { template.x }</p>
         </div>
       </div>
-      <div className={styles.btnControl}>
+      <div className={ styles.btnControl }>
         <ConfirmationModal onClick={ handleDelete } isLoading={ isLoading } disabled={ !template.id }/>
         <ConfirmationModal
           onClick={ handleBanTemplate }
           isLoading={ isLoading }
           disabled={ !template.id }
           mainButtonTitle={ 'Забанить темплейт' }
-          confirmationText={'Точно хотите забанить возможность создание темплейтов'}
-          modalTitle={'Блокировка создания темплейтов'}
+          confirmationText={ 'Точно хотите забанить возможность создание темплейтов' }
+          modalTitle={ 'Блокировка создания темплейтов' }
 
 
         />

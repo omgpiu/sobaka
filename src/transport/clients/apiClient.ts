@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios"
 import {
   IAvailableGoodsResponse, IPaginationParams,
-  IParamsAddGoods, ISingleTemplateResponse, ITemplateListResponse,
+  IParamsAddGoods, IParamsWithUserId, ISingleTemplateResponse, ITemplateListResponse,
   ITransaction,
   ITransactionResponse,
   IUserMiningResponse, IUserOverviewResponse, IWebThree, IWebThreeResponse, UserExtracted,
@@ -57,8 +57,11 @@ export class ApiClient {
 
 
   //stars
-  async getStars(userId: string): Promise<ITransaction[]> {
-    const response = await this.axiosInstance.get<ITransactionResponse>(`admin/purchase/stars/${ userId }`,);
+  async getStars(params: IParamsWithUserId): Promise<ITransaction[]> {
+    const { userId, ...restParams } = params;
+    const response = await this.axiosInstance.get<ITransactionResponse>(`admin/purchase/stars/${ userId }`, {
+      params: restParams
+    });
     return starTransactionExtractor(response.data.payments)
   }
 
@@ -84,31 +87,34 @@ export class ApiClient {
 
   //web3
 
-  async getWebThreeTransactions(userId: string): Promise<IWebThree[]> {
-    const response = await this.axiosInstance.get<IWebThreeResponse>(`admin/purchase/web3/${ userId }`,);
+  async getWebThreeTransactions(params: IParamsWithUserId): Promise<IWebThree[]> {
+    const { userId, ...restParams } = params;
+    const response = await this.axiosInstance.get<IWebThreeResponse>(`admin/purchase/web3/${ userId }`, {
+      params: restParams
+    });
     return web3TransactionsExtractor(response.data)
   }
 
   //templates
 
-  async getTemplateList(params:IPaginationParams):Promise<ITemplateListResponse> {
-    const response = await this.axiosInstance.get<ITemplateListResponse>("image/template/list",{
+  async getTemplateList(params: IPaginationParams): Promise<ITemplateListResponse> {
+    const response = await this.axiosInstance.get<ITemplateListResponse>("image/template/list", {
       params: params
     });
     return response.data
   }
 
-  async getTemplate(templateId: string):Promise<ISingleTemplateResponse>{
+  async getTemplate(templateId: string): Promise<ISingleTemplateResponse> {
     const response = await this.axiosInstance.get<ISingleTemplateResponse>(`image/template/${ templateId }`,);
     return response.data
   }
 
-  async deleteTemplate(templateId: number){
+  async deleteTemplate(templateId: number) {
     const response = await this.axiosInstance.delete(`admin/delete/template/${ templateId }`,);
     return response.data
   }
 
-  async banTemplate(templateId: number){
+  async banTemplate(templateId: number) {
     const response = await this.axiosInstance.delete(`admin/ban/template/${ templateId }`,);
     return response.data
   }
