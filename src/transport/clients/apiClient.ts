@@ -109,7 +109,7 @@ export class ApiClient {
   }
 
   async banTemplate(templateId: number){
-    const response = await this.axiosInstance.delete(`ban/template/${ templateId }`,);
+    const response = await this.axiosInstance.delete(`admin/ban/template/${ templateId }`,);
     return response.data
   }
 
