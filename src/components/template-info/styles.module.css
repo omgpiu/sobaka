@@ -51,3 +51,8 @@
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
 }
+
+.btnControl {
+    display: flex;
+    gap:20px
+}
