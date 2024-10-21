@@ -42,3 +42,18 @@
     font-weight: bolder;
     text-decoration: underline !important;
 }
+
+.button {
+    all:unset;
+    box-sizing: border-box;
+    color: white;
+    height:100%;
+    border-left:1px solid white;
+    padding: 0 10px;
+    font-weight: bolder;
+    cursor:pointer;
+}
+
+.divider {
+    flex-grow: 1;
+}

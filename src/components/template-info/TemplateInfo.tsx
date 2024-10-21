@@ -1,6 +1,12 @@
 import { Card, Collapse } from 'antd';
 import styles from './styles.module.css';
-import { ISingleTemplate, useDeleteTemplateMutation, UserExtracted, useUserBanMutation } from '../../transport';
+import {
+  ISingleTemplate,
+  useBanTemplateMutation,
+  useDeleteTemplateMutation,
+  UserExtracted,
+  useUserBanMutation
+} from '../../transport';
 import { FC } from 'react';
 import { ConfirmationModal } from '../confirmation-modal';
 import clsx from 'clsx';
@@ -17,10 +23,13 @@ interface IProps {
 export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, limit }) => {
   const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
   const { banUser } = useUserBanMutation()
+  const { banTemplate } = useBanTemplateMutation()
   const handleDelete = async () => {
     await deleteTemplate(template.id)
   };
-
+  const handleBanTemplate = async () => {
+    await banTemplate(template.id)
+  }
   const handleBanUser = async () => {
     await banUser(template.id)
   }
@@ -41,7 +50,19 @@ export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, li
           <p><span>Template X:</span> { template.x }</p>
         </div>
       </div>
-      <ConfirmationModal onClick={ handleDelete } isLoading={ isLoading } disabled={ !template.id }/>
+      <div className={styles.btnControl}>
+        <ConfirmationModal onClick={ handleDelete } isLoading={ isLoading } disabled={ !template.id }/>
+        <ConfirmationModal
+          onClick={ handleBanTemplate }
+          isLoading={ isLoading }
+          disabled={ !template.id }
+          mainButtonTitle={ 'Забанить темплейт' }
+          confirmationText={'Точно хотите забанить возможность создание темплейтов'}
+          modalTitle={'Блокировка создания темплейтов'}
+
+
+        />
+      </div>
       <hr style={ { marginTop: '20px' } }/>
       <div className={ styles.info }>
         <div className={ styles.image }>
@@ -52,14 +73,13 @@ export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, li
           <p><span>League:</span> { user.league }</p>
           <p><span>Comment:</span> { user.comment }</p>
         </div>
-
       </div>
       <ConfirmationModal
         onClick={ handleBanUser }
         isLoading={ isLoading }
         disabled={ !template.id || user.isBanned }
         confirmationText={ `Точно хотите забанить  ${ user.firstName } ?` }
-        mainButtonTitle={ user.isBanned ? 'Забанен' : 'Забанить?' }
+        mainButtonTitle={ user.isBanned ? 'Забанен' : `Забанить ${ user.firstName ?? '' } ` }
         modalTitle={ `Время банить говнаря ${ user.firstName }` }
       >
         <div className={ styles.image }>

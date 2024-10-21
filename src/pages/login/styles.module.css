@@ -1,0 +1,22 @@
+.root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: cadetblue;
+}
+
+.card {
+    width: 300px
+}
+
+.cardTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+        width:48px;
+        height:48px;
+    }
+}
