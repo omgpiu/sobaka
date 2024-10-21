@@ -1,6 +1,15 @@
+export interface ITablePagination<T> extends IPaginationParams {
+  updatePagination: (currentPage: number, pageSize: number) => void
+  dataSource: T
+}
+
 export interface IPaginationParams {
   limit: number;
   offset: number;
+}
+
+export interface IParamsWithUserId extends IPaginationParams {
+  userId: string;
 }
 
 type IUserBoostsResponse = {

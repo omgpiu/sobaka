@@ -1,6 +1,8 @@
-import {  Table } from 'antd';
+import { Table } from 'antd';
 import {
-  ITemplate, useDeleteTemplateMutation,
+  ITablePagination,
+  ITemplate,
+  useDeleteTemplateMutation,
   useTemplateListQuery,
 } from '../../../transport';
 import { FC, useMemo } from 'react';
@@ -8,17 +10,14 @@ import { Empty } from '../../empty';
 import { ConfirmationModal } from '../../confirmation-modal';
 import styles from './styles.module.css'
 
-interface IProps {
+type Props = Omit<ITablePagination<[]>, 'dataSource'> & {
   onIdClick: (templateId: string) => void;
   isSingleTemplateLoading: boolean
-  offset: number
-  limit: number
-  updatePagination:(currentPage: number,pageSize:number) => void
 }
 
-export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading,offset,limit,updatePagination }) => {
-  const { data} = useTemplateListQuery(limit,offset)
-  const { deleteTemplate } = useDeleteTemplateMutation(limit,offset)
+export const TemplatesTable: FC<Props> = ({ onIdClick, isSingleTemplateLoading, offset, limit, updatePagination }) => {
+  const { data } = useTemplateListQuery(limit, offset)
+  const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
 
   const onCLickHandler = async (templateId: string) => {
     await deleteTemplate(templateId)
@@ -40,7 +39,7 @@ export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading,
       sorter: (a: ITemplate, b: ITemplate) => Number(a.templateId) - Number(b.templateId),
       width: 150,
       onCell: (record: ITemplate) => {
-        return  isSingleTemplateLoading
+        return isSingleTemplateLoading
           ? {
             style: { cursor: 'not-allowed', opacity: 0.5 },
           }
@@ -61,14 +60,15 @@ export const TemplatesTable: FC<IProps> = ({ onIdClick, isSingleTemplateLoading,
       title: 'Template Img',
       dataIndex: 'url',
       key: 'url',
-      render: (url: ITemplate['url']) => <img src={ url } alt="template_url" className={styles.img}/>
+      render: (url: ITemplate['url']) => <img src={ url } alt="template_url" className={ styles.img }/>
     },
     {
       title: 'Action',
       key: 'action',
       width: 150,
       align: 'center' as const,
-      render: (record: ITemplate) =><ConfirmationModal onClick={()=>onCLickHandler(record.templateId)} isLoading={isSingleTemplateLoading}/>
+      render: (record: ITemplate) => <ConfirmationModal onClick={ () => onCLickHandler(record.templateId) }
+                                                        isLoading={ isSingleTemplateLoading }/>
     },
   ], [])
 
