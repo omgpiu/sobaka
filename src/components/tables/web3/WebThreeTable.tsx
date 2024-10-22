@@ -65,7 +65,12 @@ const columns = [
 ];
 
 
-export const WebThreeTable: React.FC<ITablePagination<IWebThree[]>> = ({ dataSource, limit, offset, updatePagination }) => {
+export const WebThreeTable: React.FC<ITablePagination<IWebThree[]>> = ({
+  dataSource,
+  limit,
+  offset,
+  updatePagination
+}) => {
   return <div>
     <h2>Транзакции WEB3</h2>
     <Table dataSource={ dataSource } columns={ columns } rowKey={ 'id' }
@@ -75,9 +80,9 @@ export const WebThreeTable: React.FC<ITablePagination<IWebThree[]>> = ({ dataSou
            pagination={ {
              current: Math.floor(offset / limit) + 1,
              pageSize: limit,
-             total: 900,
+             total: 5000,
              showSizeChanger: true,
-             pageSizeOptions: [ '20', '50', '100' ],
+             pageSizeOptions: [ '20', '50', '100', '500' ],
            } }
            onChange={ (pagination) => {
              updatePagination(pagination.current ?? 0, pagination.pageSize ?? 0)

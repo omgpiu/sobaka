@@ -5,7 +5,7 @@ import {
   useDeleteTemplateMutation,
   useTemplateListQuery,
 } from '../../../transport';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Empty } from '../../empty';
 import { ConfirmationModal } from '../../confirmation-modal';
 import styles from './styles.module.css'
@@ -13,20 +13,64 @@ import styles from './styles.module.css'
 type Props = Omit<ITablePagination<[]>, 'dataSource'> & {
   onIdClick: (templateId: string) => void;
   isSingleTemplateLoading: boolean
+  banTemplate: (id: number) => Promise<void>
 }
 
-export const TemplatesTable: FC<Props> = ({ onIdClick, isSingleTemplateLoading, offset, limit, updatePagination }) => {
+const handleAction = async (actionFn: (id: number) => Promise<void>, selectedRowKeys: Array<number | string>) => {
+  for (const templateId of selectedRowKeys) {
+    try {
+      await actionFn(Number(templateId));
+    } catch (error) {
+    }
+  }
+};
+
+
+export const TemplatesTable: FC<Props> = ({
+  onIdClick,
+  isSingleTemplateLoading,
+  offset,
+  limit,
+  updatePagination,
+  banTemplate
+}) => {
   const { data } = useTemplateListQuery(limit, offset)
   const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
+  const [ selectedRowKeys, setSelectedRowKeys ] = useState<any>([]);
 
-  const onCLickHandler = async (templateId: string) => {
-    await deleteTemplate(templateId)
-  }
+  const onDeleteHandlerBulk = async () => {
+    await handleAction(deleteTemplate, selectedRowKeys);
+    setSelectedRowKeys([])
+  };
+
+  const onBanHandlerBulk = async () => {
+    await handleAction(banTemplate, selectedRowKeys);
+    setSelectedRowKeys([])
+  };
 
   const handleClicked = (templateId: string) => () => {
     onIdClick(templateId)
   }
 
+  const onDeleteHandlerSingle = async (templateId: string) => {
+    await deleteTemplate(templateId)
+  }
+
+  const onBanHandlerSingle = async (templateId: number) => {
+    await banTemplate(templateId)
+  }
+
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedKeys: any) => {
+      setSelectedRowKeys(selectedKeys);
+    },
+
+    onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
+      console.log('Selected all rows:', selectedRows, selected, changeRows);
+    },
+  };
 
   const columns = useMemo(() => [
     {
@@ -67,24 +111,50 @@ export const TemplatesTable: FC<Props> = ({ onIdClick, isSingleTemplateLoading, 
       key: 'action',
       width: 150,
       align: 'center' as const,
-      render: (record: ITemplate) => <ConfirmationModal onClick={ () => onCLickHandler(record.templateId) }
-                                                        isLoading={ isSingleTemplateLoading }/>
+      render: (record: ITemplate) => <div className={ styles.actions }>
+        <ConfirmationModal
+          onClick={ () => onDeleteHandlerSingle(record.templateId) }
+          isLoading={ isSingleTemplateLoading }/>
+        <ConfirmationModal
+          onClick={ () => onBanHandlerSingle(Number(record.templateId)) }
+          mainButtonTitle={ 'Забанить' }
+          confirmationText={ 'Забанить темплейт и создателя?' }
+          modalTitle={ 'Подтверждение бана темплейта' }
+          isLoading={ isSingleTemplateLoading }/>
+      </div>
     },
   ], [])
 
 
   return <div>
-    <h2>Templates</h2>
+    <h2>Templates
+      <ConfirmationModal
+        onClick={ onDeleteHandlerBulk }
+        isLoading={ isSingleTemplateLoading }
+        confirmationText={ 'Удалить темплейты?' }
+        modalTitle={ 'Подтверждение удаления темплейтов' }
+        disabled={!selectedRowKeys.length}
+      />
+      <ConfirmationModal
+        onClick={ onBanHandlerBulk }
+        mainButtonTitle={ 'Забанить' }
+        confirmationText={ 'Забанить темплейты и создателей?' }
+        modalTitle={ 'Подтверждение бана темплейтов' }
+        isLoading={ isSingleTemplateLoading }
+        disabled={!selectedRowKeys.length}
+      />
+    </h2>
     <Table dataSource={ data ?? [] } columns={ columns } rowKey={ 'templateId' }
            locale={ {
              emptyText: <Empty/>
            } }
+           rowSelection={ rowSelection }
            pagination={ {
              current: Math.floor(offset / limit) + 1,
              pageSize: limit,
-             total: 900,
+             total: 10000,
              showSizeChanger: true,
-             pageSizeOptions: [ '20', '50', '100' ],
+             pageSizeOptions: [ '20', '50', '100', '500' ],
            } }
            onChange={ (pagination) => {
              updatePagination(pagination.current ?? 0, pagination.pageSize ?? 0)
