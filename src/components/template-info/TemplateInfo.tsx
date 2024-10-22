@@ -2,7 +2,6 @@ import { Card, Collapse } from 'antd';
 import styles from './styles.module.css';
 import {
   ISingleTemplate,
-  useBanTemplateMutation,
   useDeleteTemplateMutation,
   UserExtracted,
   useUserBanMutation
@@ -17,13 +16,14 @@ interface IProps {
   user: UserExtracted
   offset: number
   limit: number
+  banTemplate:(id:number) =>void
 }
 
 
-export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, limit }) => {
+export const TemplateInfo: FC<IProps> = ({ template, isLoading, user, offset, limit,banTemplate }) => {
   const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
   const { banUser } = useUserBanMutation()
-  const { banTemplate } = useBanTemplateMutation(limit, offset)
+
   const handleDelete = async () => {
     await deleteTemplate(template.id)
   };
