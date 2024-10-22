@@ -82,9 +82,9 @@ export const TemplatesTable: FC<Props> = ({ onIdClick, isSingleTemplateLoading, 
            pagination={ {
              current: Math.floor(offset / limit) + 1,
              pageSize: limit,
-             total: 900,
+             total: 10000,
              showSizeChanger: true,
-             pageSizeOptions: [ '20', '50', '100' ],
+             pageSizeOptions: [ '20', '50', '100','500'],
            } }
            onChange={ (pagination) => {
              updatePagination(pagination.current ?? 0, pagination.pageSize ?? 0)

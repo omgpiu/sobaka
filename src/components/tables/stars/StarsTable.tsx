@@ -144,9 +144,9 @@ export const StarsTable: React.FC<ITablePagination<ITransaction[]>> = (
            pagination={ {
              current: Math.floor(offset / limit) + 1,
              pageSize: limit,
-             total: 900,
+             total: 5000,
              showSizeChanger: true,
-             pageSizeOptions: [ '20', '50', '100' ],
+             pageSizeOptions: [ '20', '50', '100','500' ],
            } }
            onChange={ (pagination) => {
              updatePagination(pagination.current ?? 0, pagination.pageSize ?? 0)
