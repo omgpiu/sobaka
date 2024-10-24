@@ -10,7 +10,8 @@ export const userOverviewExtractor = (userData: IUserOverviewResponse):UserExtra
     language:userData.language,
     isBanned:userData.isBanned,
     comment:userData.comment,
-    friends:userData.friends
+    friends:userData.friends,
+    isContractor:userData.isContractor
   }
 
 }

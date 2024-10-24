@@ -56,6 +56,7 @@ export interface IUserOverviewResponse {
   "comment": string,
   "websocketToken": string
   isBanned?: boolean
+  isContractor: boolean
 }
 
 export interface IUserMiningResponse {
@@ -145,7 +146,7 @@ export interface IWebThreeResponse {
   payments: Record<string, IWebThree>
 }
 
-export type UserExtracted = Pick<IUserOverviewResponse, 'userPic' | 'firstName' | 'lastName' | 'league' | 'isBanned' | 'comment' | 'language' | 'friends'>
+export type UserExtracted = Pick<IUserOverviewResponse, 'userPic' | 'firstName' | 'lastName' | 'league' | 'isBanned' | 'comment' | 'language' | 'friends'|'isContractor'>
 export type IUser = Omit<IUserMiningResponse, 'Tasks' | 'Boost'> & UserExtracted
 
 export interface ITask {

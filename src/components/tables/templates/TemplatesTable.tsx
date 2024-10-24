@@ -1,20 +1,15 @@
 import { Table } from 'antd';
 import {
-  ITablePagination,
-  ITemplate,
+  ITemplate, useBanTemplateMutation,
   useDeleteTemplateMutation,
-  useTemplateListQuery,
+  useTemplateListQuery, useTemplateQuery, useUserBanMutation,
 } from '../../../transport';
-import { FC, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Empty } from '../../empty';
 import { ConfirmationModal } from '../../confirmation-modal';
 import styles from './styles.module.css'
-
-type Props = Omit<ITablePagination<[]>, 'dataSource'> & {
-  onIdClick: (templateId: string) => void;
-  isSingleTemplateLoading: boolean
-  banTemplate: (id: number) => Promise<void>
-}
+import { AdditionalTemplateInfo } from './components';
+import { usePagination } from '../../../hooks';
 
 const handleAction = async (actionFn: (id: number) => Promise<void>, selectedRowKeys: Array<number | string>) => {
   for (const templateId of selectedRowKeys) {
@@ -26,17 +21,18 @@ const handleAction = async (actionFn: (id: number) => Promise<void>, selectedRow
 };
 
 
-export const TemplatesTable: FC<Props> = ({
-  onIdClick,
-  isSingleTemplateLoading,
-  offset,
-  limit,
-  updatePagination,
-  banTemplate
-}) => {
-  const { data } = useTemplateListQuery(limit, offset)
-  const { deleteTemplate } = useDeleteTemplateMutation(limit, offset)
+export const TemplatesTable = () => {
+  const { limit, offset, updatePagination } = usePagination(20);
+
+  const { data = [] } = useTemplateListQuery(limit, offset)
+  const { deleteTemplate, isPending: isDeletingTemplate } = useDeleteTemplateMutation(limit, offset)
+  const { banTemplate, isPending: isBanningTemplate } = useBanTemplateMutation(limit, offset)
+  const { getExtendedTemplateInfo, isLoading, templateInfo } = useTemplateQuery()
+  const { banUser, isPending: isBannigUser } = useUserBanMutation()
+
   const [ selectedRowKeys, setSelectedRowKeys ] = useState<any>([]);
+
+  const isRequestsRunning = isLoading || isBanningTemplate || isDeletingTemplate || isBannigUser
 
   const onDeleteHandlerBulk = async () => {
     await handleAction(deleteTemplate, selectedRowKeys);
@@ -48,10 +44,6 @@ export const TemplatesTable: FC<Props> = ({
     setSelectedRowKeys([])
   };
 
-  const handleClicked = (templateId: string) => () => {
-    onIdClick(templateId)
-  }
-
   const onDeleteHandlerSingle = async (templateId: string) => {
     await deleteTemplate(templateId)
   }
@@ -60,15 +52,10 @@ export const TemplatesTable: FC<Props> = ({
     await banTemplate(templateId)
   }
 
-
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedKeys: any) => {
       setSelectedRowKeys(selectedKeys);
-    },
-
-    onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
-      console.log('Selected all rows:', selectedRows, selected, changeRows);
     },
   };
 
@@ -82,17 +69,6 @@ export const TemplatesTable: FC<Props> = ({
       key: 'templateId',
       sorter: (a: ITemplate, b: ITemplate) => Number(a.templateId) - Number(b.templateId),
       width: 150,
-      onCell: (record: ITemplate) => {
-        return isSingleTemplateLoading
-          ? {
-            style: { cursor: 'not-allowed', opacity: 0.5 },
-          }
-          : {
-            onClick: handleClicked(record.templateId),
-            style: { cursor: 'pointer' },
-          };
-      },
-
     },
     {
       title: 'Subscribers',
@@ -104,7 +80,21 @@ export const TemplatesTable: FC<Props> = ({
       title: 'Template Img',
       dataIndex: 'url',
       key: 'url',
-      render: (url: ITemplate['url']) => <img src={ url } alt="template_url" className={ styles.img }/>
+      render: (url: ITemplate['url']) => {
+        const date = Date.now()
+        return <img src={ url + `?time=${ date }` } alt="template_url" className={ styles.img }/>
+      }
+    },
+    {
+      title: 'Additional',
+      key: 'additional',
+      render: (record: ITemplate) => (
+        <AdditionalTemplateInfo
+          record={ record }
+          getTemplateInfo={ getExtendedTemplateInfo }
+          loading={ isRequestsRunning }
+          banUser={ banUser }
+        />)
     },
     {
       title: 'Action',
@@ -114,37 +104,47 @@ export const TemplatesTable: FC<Props> = ({
       render: (record: ITemplate) => <div className={ styles.actions }>
         <ConfirmationModal
           onClick={ () => onDeleteHandlerSingle(record.templateId) }
-          isLoading={ isSingleTemplateLoading }/>
+          isLoading={ isRequestsRunning }/>
         <ConfirmationModal
           onClick={ () => onBanHandlerSingle(Number(record.templateId)) }
           mainButtonTitle={ 'Забанить' }
           confirmationText={ 'Забанить темплейт и создателя?' }
           modalTitle={ 'Подтверждение бана темплейта' }
-          isLoading={ isSingleTemplateLoading }/>
+          isLoading={ isRequestsRunning }/>
       </div>
     },
   ], [])
 
 
+  const extendedDataSource = data.map(template => {
+    if (templateInfo.id === Number(template.templateId)) {
+      return {
+        ...template,
+        extended: templateInfo
+      }
+    }
+    return template
+  })
+
   return <div>
     <h2>Templates
       <ConfirmationModal
         onClick={ onDeleteHandlerBulk }
-        isLoading={ isSingleTemplateLoading }
+        isLoading={ isRequestsRunning }
         confirmationText={ 'Удалить темплейты?' }
         modalTitle={ 'Подтверждение удаления темплейтов' }
-        disabled={!selectedRowKeys.length}
+        disabled={ !selectedRowKeys.length }
       />
       <ConfirmationModal
         onClick={ onBanHandlerBulk }
         mainButtonTitle={ 'Забанить' }
         confirmationText={ 'Забанить темплейты и создателей?' }
         modalTitle={ 'Подтверждение бана темплейтов' }
-        isLoading={ isSingleTemplateLoading }
-        disabled={!selectedRowKeys.length}
+        isLoading={ isRequestsRunning }
+        disabled={ !selectedRowKeys.length }
       />
     </h2>
-    <Table dataSource={ data ?? [] } columns={ columns } rowKey={ 'templateId' }
+    <Table dataSource={ extendedDataSource } columns={ columns } rowKey={ 'templateId' }
            locale={ {
              emptyText: <Empty/>
            } }

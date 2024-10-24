@@ -7,7 +7,7 @@ export const useUserBanMutation = () => {
   const apiClient = useApiClient();
   const queryClient = useQueryClient();
 
-  const {mutateAsync, isError, isSuccess, data} = useMutation({
+  const {mutateAsync, isError, isSuccess, data,isPending} = useMutation({
       mutationFn: (userId: number) => apiClient.banUser(userId)!,
       onSuccess: async () => {
         message.success('Чухонец забанен!')
@@ -25,6 +25,7 @@ export const useUserBanMutation = () => {
     isError,
     data,
     banUser: mutateAsync,
+    isPending
   };
 };
 
