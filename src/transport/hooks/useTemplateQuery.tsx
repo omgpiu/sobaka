@@ -7,26 +7,32 @@ import { ISingleTemplate, UserExtracted } from '../types.ts';
 export const useTemplateQuery = () => {
   const apiClient = useApiClient()
 
-  const [templateId, setTemplateId] = useState< null | string >(null);
+  const [ templateId, setTemplateId ] = useState<null | string>(null);
 
-  const {data, isError, isLoading, isSuccess,refetch} = useQuery({
-    queryKey: ['templateSingle'],
-    queryFn: () => apiClient.getTemplate(templateId!),
+  const { data, isError, isLoading, refetch, isSuccess } = useQuery({
+    queryKey: [ 'extendedTemplateInfo' ],
+    queryFn: async () => {
+      const [ template, user ] = await Promise.all([
+        apiClient.getTemplate(templateId!),
+        apiClient.getUser(templateId!)
+      ]);
+
+      return {
+        ...template,
+        ...user
+      }
+
+    },
+
     enabled: Boolean(templateId),
   });
 
-  const {data:userData, isError:isUserError, isLoading:isUserLoading,refetch:refetchUser} = useQuery({
-    queryKey: ['userSingle'],
-    queryFn: () => apiClient.getUser(templateId!),
-    enabled: Boolean(templateId),
-  });
 
   useEffect(() => {
     if (isSuccess) {
       refetch()
-      refetchUser()
     }
-  }, [templateId])
+  }, [ templateId ])
 
   const handleClick = (templateId: string) => {
     setTemplateId(templateId);
@@ -34,10 +40,9 @@ export const useTemplateQuery = () => {
 
   return {
     isSuccess,
-    isError:isError||isUserError,
-    isLoading:isUserLoading || isLoading,
-    template:data ?? {} as ISingleTemplate,
-    user:userData ?? {} as UserExtracted,
-    getSingleTemplate: handleClick
+    isError,
+    isLoading,
+    templateInfo: data ?? {} as ISingleTemplate & UserExtracted,
+    getExtendedTemplateInfo: handleClick
   }
 }

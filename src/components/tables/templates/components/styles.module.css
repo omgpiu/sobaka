@@ -1,8 +1,6 @@
 .cardContainer {
-    border: 1px solid #d9d9d9;
-    border-radius: 8px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: transparent;
 }
 
 .info {
@@ -40,19 +38,4 @@
 
 .buttonDelete {
     background-color: #d9d9d9;
-}
-
-.collapsedHeader {
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.pixeled {
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-}
-
-.btnControl {
-    display: flex;
-    gap:20px
 }
